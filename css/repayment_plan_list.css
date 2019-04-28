@@ -1,0 +1,88 @@
+.list-top{
+    width: 100%;
+    height: 8rem;
+    float: left;
+    background-color: #729eff;
+    color: white;
+}
+#segmentedControl .mui-active{
+    color: deepskyblue;
+    background: none !important;
+    /*filter:alpha(opacity=50);*/
+    /*-moz-opacity:0.5;*/
+    /*-khtml-opacity: 0.5;*/
+    /*opacity: 0.5;*/
+}
+.icon-shibai,.icon-zhixingzhong,.icon-dengdaizhihang,.icon-zhixingchenggong{
+    font-size: 18px;
+    position: relative;
+    top: 2px;
+}
+.all-repayment,.all-consumption{
+    float: left;
+    width: 50% !important;
+    height: 8rem;
+}
+.list-top .inp {
+    width: 100%;
+    float: left;
+    outline: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+    text-align: center;
+    background: none;
+    font-size: 1.5rem;
+    height: 5rem;
+	line-height: 6rem;
+    border: none;
+	padding: 0;
+}
+.show{
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 0.8rem;
+}
+.repayment-li-li{
+	/* width: 100%;
+	height: 40rem; */
+}
+.repayment-li{
+/* 	width:100%;
+	height: 15rem; */
+}
+.repaymeny-li-top{
+    height: 1.6rem;
+    line-height: 1.6rem;
+    text-align: left;
+    font-size: 0.8rem;
+    background-color: #eff4f7;
+}
+.repaymeny-li-middle{
+    width: 100%;
+    height: 6.8rem;
+    /*background-color: #e7136a;*/
+    /*border-bottom: 1px lightgrey solid;*/
+}
+.repaymeny-li-middle>div{
+    float: left;
+    width: 50%;
+    margin: 0.5rem 0;
+    /*font-size: 1rem;*/
+}
+.repaymeny-li-bottom{
+    /*border-bottom: 1px lightgrey solid;*/
+	/* position: absolute; */
+	width: 100%;
+	float: left;
+}
+
+.mui-segmented-control{
+    border-radius: 0;
+    border: none;
+}
+.mui-segmented-control .mui-control-item{
+    border: none;
+    color: black;
+    font-size: 0.8rem;
+}

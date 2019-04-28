@@ -1,0 +1,22 @@
+
+.mui-table-view-cell div:first-child{
+    margin-bottom: 1rem;
+}
+.money{
+    color: #006d00;
+    font-size: 1.1rem;
+    position: absolute;
+    right: 0.5rem;
+    top: 1rem;
+}
+.bill{
+    color: #006d00;
+    font-size: 1.2rem;
+    font-weight: 200;
+}
+.other{
+    color: gray;
+}
+.mui-table-view-cell{
+    margin-bottom: 0.5rem;
+}

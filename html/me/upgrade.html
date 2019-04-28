@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/iconfont.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+			}
+			.mui-control-content {
+				background-color: #EFEFF4;
+				min-height: 760px;
+			}
+			.mui-table-view-cell{
+				height: 130px;
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+				margin-top: 10px;
+			}
+			.appname{
+				float: left;
+				margin-right: 12px;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background-color: #FFE7BA; 
+				text-align: center;
+				line-height: 65px;				
+				padding-left: 4px;
+			}
+			.hicon1{
+				color: #8DEEEE;
+				font-size: 30px;
+			}
+			.hicon2{
+				color: #90EE90;
+				font-size: 30px;
+			}
+			.cardbot{
+			}
+			.card-right{
+				width: 100%;
+			}
+			.present{
+				width: 100%;
+				height: 25px;
+				display: block;
+			}
+			.limit{
+				display: block;
+			}
+			.present-title{
+				float: left;
+				font-size: 16px;
+				font-weight: bold;
+			}
+			.present-day-interest{
+				float: right;
+				font-size: 13px;
+				/* margin-right: 15px; */
+				margin-top: -40px;
+			}
+			.limit-left{
+				font-size: 16px;
+				margin-top: 5px;
+				float: left;
+				font-weight: bold;
+				margin-right: 5px;
+			}
+			.limit-num{
+				float: left;				
+				margin-top: 5px;
+				font-size: 16px;
+				color: orangered;
+			}
+			.rate{
+				width: 100%;
+				float: left;
+				/* display: block; */
+				margin-top: 10px;
+			}
+			.rate span{
+				float: left;
+				margin-right: 10px;
+			}
+			.strike{
+				width: 100%;
+				float: left;
+				margin-top: 5px;
+				/* display: block; */
+			}
+			.strike span{
+				float: left;
+				margin-right: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+		    <h1 class="mui-title">会员升级</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view item1ul">
+								<li class="mui-table-view-cell">
+									<div class="cardbot touch-action">
+										<div class="appname">
+											<span class="hicon1 mui-icon iconfont icon-fuwushang"></span>
+										</div>
+										<div class="card-right">
+											<div class="present">
+												<span class="present-title">服务商 </span>
+											</div>
+											<div class="limit">
+												<span class="limit-left">￥</span>
+												<p class="limit-num">2980.00</p>
+											</div>
+											<div class="rate">
+												<span class="mui-icon iconfont icon-yuefeilv" style="color: #228B22;"></span>
+												<p>享受终端结算费率0.55%</p>
+											</div>
+											<div class="strike">
+												<span class="mui-icon iconfont icon-jiesuanjia" style="color: #CD9B1D;"></span>
+												<p>享受经纪人结算价138元</p>
+											</div>
+											<p class="present-day-interest"><button type="button" class="mui-btn mui-btn-blue" id="btn_update_fws">一键升级</button></p>
+
+										</div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell">
+									<div class="cardbot touch-action">
+										<div class="appname" style="background-color:pink;">
+											<span class="hicon2 mui-icon iconfont icon-jingjiren"></span>
+										</div>
+										<div class="card-right">
+											<div class="present">
+												<span class="present-title">经纪人 </span>
+											</div>
+											<div class="limit">
+												<span class="limit-left">￥</span>
+												<p class="limit-num">298.00</p>
+											</div>
+											<div class="rate">
+												<span class="mui-icon iconfont icon-yuefeilv" style="color: #228B22;"></span>
+												<p>享受终端结算费率0.60%</p>
+											</div>
+											<div class="strike">
+												<span class="mui-icon iconfont icon-jiesuanjia" style="color: #CD9B1D;"></span>
+												<p>享受经纪人结算价138元</p>
+											</div>
+											<p class="present-day-interest"><button type="button" class="mui-btn mui-btn-blue " id="btn_update_jjr">一键升级</button></p>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/mui.js"></script>
+			<script src="../../js/common.js"></script>
+			<script src="../../js/md5.min.js"></script>		
+			<script src="../../js/vue.min.js"></script>
+	
+			<script type="text/javascript">
+				
+				mui.init();
+				mui.plusReady(function()
+				{
+					var ltoken=localStorage.logintoken;
+					document.getElementById("btn_update_jjr").addEventListener("tap",function(){
+						
+						var up_url=address_pay("/index.php/index/alipay/upgradeL1?token="+ltoken);
+						mui.openWindow({
+							url:up_url,
+							id:"url_upgrade",
+						}
+						)
+					})
+					
+					document.getElementById("btn_update_fws").addEventListener("tap",function(){
+						
+						var up_url=address_pay("/index.php/index/alipay/upgradeL2?token="+ltoken);
+						mui.openWindow({
+							url:up_url,
+							id:"url_upgrade",
+						}
+						)
+					})
+					
+					})
+					
+			</script>
+
+</html>

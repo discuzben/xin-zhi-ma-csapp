@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.item1ul{
+			margin-top: 30px !important;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 760px;
+			}
+			.cell{
+				margin:10px 20px;
+				height: 50px;
+			}
+			.cell input{
+				border: 1px solid rgba(0,0,0,.3);
+			}
+			.cell button{
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">手动添加邮箱</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							
+							<ul class="mui-table-view item1ul">
+								<li class="cell">
+									<div class="mui-input-row">
+										<label>用户名</label>
+										<input type="text" style="border-bottom: 1px solid rgba(0,0,0,.3);" class="mui-input-clear " placeholder="请输入邮箱账户" value="ddd@126.com">
+									</div>
+								</li>
+								<li class="cell">
+									<div class="mui-input-row">
+										<label>密码</label>
+										<input type="password" style="border-bottom: 1px solid rgba(0,0,0,.3);" class="mui-input-password" placeholder="请输入账户密码" value="sss">
+									</div>
+								</li>
+								<li class="cell">
+									<div class="mui-input-row">
+										<label>服务器</label>
+										<input type="text" style="border-bottom: 1px solid rgba(0,0,0,.3);" placeholder="请输入服务器" value="pop.126.com">
+									</div>
+								</li>
+								<li class="cell">
+									<div class="mui-input-row">
+										<label>端口</label>
+										<input type="text" style="border-bottom: 1px solid rgba(0,0,0,.3);" placeholder="请输入端口" value="995">
+									</div>
+								</li>
+								<li class="">
+									<span style="padding-left: 15px;">协议选择</span>
+									<div class="mui-input-row mui-radio">
+										<label>pop</label>
+										<input name="radio1" type="radio" checked>
+									</div>
+									<div class="mui-input-row mui-radio">
+										<label>imap</label>
+										<input name="radio1" type="radio">
+									</div>
+								</li>
+								<li class="cell" style="margin-top: 15px;">
+									<div class="mui-input-row mui-navigate-right">
+										<a href="" style="color: #000000;">安全类型 <span class="mui-pull-right" style="color: grey; margin-right: 35px;font-size: 15px;">SSL/TLS</span></a>
+									</div>
+								</li>
+								<li class="cell" style="margin-top: 5px;">
+									<div class="mui-input-row mui-navigate-right">
+										<a href="" style="color: #000000;">从服务器中删除邮件 <span class="mui-pull-right" style="color: grey; margin-right: 35px;font-size: 15px;">从不</span></a>
+									</div>
+								</li>
+								<li class="cell">
+									<button type="button" class="mui-btn mui-btn-blue">确认添加</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				document.addEventListener('get_addmail_detail', function(event) {
+					console.log(event.detail)
+					let mailbox_id = event.detail.mailbox_id;
+					console.log(mailbox_id);
+					
+				});
+			});
+			function da(){
+				var da ={};
+				var token=localStorage.logintoken;
+				//保存本地的数据
+				var signkey=localStorage.signkey;
+				var signcode=sign(da,signkey);
+									
+				da['sign']=signcode;
+				return da;
+			}
+		</script>
+	</body>
+
+</html>

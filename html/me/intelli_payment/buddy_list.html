@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+			}
+			/* .mui-content{
+				margin-top: 44px;
+			} */
+			.btn-back{
+				position: fixed;
+				bottom: 0px;
+				margin-bottom: 0;
+				z-index: 1000;
+			}
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content" id="mui-content">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">我的推广(当前好友层级{{level}})</h1>
+		</header>
+		<div class="mui-content">
+			<img src="../../../imgs/ad1.png" style="width: 100%;">
+			<div class="cbtn">
+					<div class="mui-scroll-wrapper" style="margin-top: 200px;margin-bottom: 57px;">
+						<div class="mui-scroll">
+							<ul class="mui-table-view mepage-list" id="friend-list">
+								<li class="mui-table-view-cell" v-for="item in buddyList" @tap="open_level(item)">
+									<a class="mui-navigate-right touch-action" id="btn-buddy-list">
+										<img src="../../../imgs/ad1.png" class="mui-icon mui-icon-locked" style="width:50px;height:50px; float: left;margin-left: 20px;margin-right: 20px; border-radius: 50%;" />
+										<div id="buddy_r" style="float: left;">
+											<h4>{{item.phone}}（{{item.role==null?'无':item.role.role_name}}）</h4>
+											<p style="float: left;margin-right: 20px;">团队人数<span id="" style="color: red;"> {{item.teamCount}} </span>人</p>
+											<p style="float: left;">累计收益<span id="" style="color: orange;"> ￥{{item.income_amount==null?0:item.income_amount}}
+												</span></p>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				<button type="button" class="mui-btn mui-btn-blue mui-btn-block btn-back">返回上一层级</button>
+			</div>
+		</div>
+		</div>
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script src="../../../js/md5.min.js"></script>
+		<script src="../../../js/vue.min.js"></script>
+		<script src="../../../js/mui.pullToRefresh.js"></script>
+		<script src="../../../js/mui.pullToRefresh.material.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			function pull(){
+				
+			}
+			mui('#friend-list').pullToRefresh({
+				up: {
+					callback: function() {
+						let self = this;
+						setTimeout(function() {
+							postdata.call(self,vm.curId,true);
+							self.endPullUpToRefresh();
+						}, 1000);
+					},
+					auto: true,
+					show: true
+				}
+			});
+			
+			mui.plusReady(function() {
+				vm.curId = translateType(localStorage.userinfo).uid;
+				//根据id更换当前页面的数据
+				// postdata(vm.curId);
+
+// 				console.log(translateType(localStorage.userinfo).uid);
+// 				// 点击当前层级项,根据项获取下一层级数据
+// 
+// 				//点击返回获取上一层级数据
+				mui('.cbtn').on('tap', '.btn-back', function() {
+					if (vm.level <= 1) {
+						mui.toast('当前为顶层!');
+						return;
+					}
+					vm.curId = vm.preId[vm.level - 2];
+					vm.preId.pop();
+					vm.page = 1;
+					postdata(vm.curId);
+					vm.level--;
+					console.log(vm.level);
+				});
+				
+			});
+			
+			function open_level(item) {
+				//触发子窗口传递下列数据变更当前页面好友列表详情
+				vm.preId[vm.preId.length] = vm.curId;
+				vm.curId = item.uid;
+				vm.page = 1;
+				postdata(vm.curId);
+				vm.level++;
+				console.log(vm.level);
+			}
+
+			function postdata(id,bu) {
+				if (postdata.isloading == true) {
+					return;
+				}
+				postdata.isloading = true;
+				let self = this;
+				var url = address("/api/User/friends");
+				console.log("sss");
+				document.getElementsByClassName("mui-pull-loading")[0].innerText = "正在加载...";
+				mui.post(url, da(id), function(data) {
+					// data = {"code":1,"msg":"","data":{"min_page":1,"max_page":3,"page":1,"count":1,"limit":10,"offset":0,"data":[{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}},{"uid":3,"phone":"13375086828","password":"$2y$10$YK2teGQGW0/2Owx5TNDzEedY1odTcLti6itzu4LV9Id8a4vWhPhbG","pay_password":"","nick_name":"","real_name":"陈学龙","real_name_status":2,"idcard_no":"350823199611073735","idcard_img_id":5,"create_time":1543472280,"update_time":"2018-11-29 06:18:00","grade":0,"p_uid":2,"ps_uid":"2,3","isdelete":0,"enable":1,"reg_ip":1851418815,"reg_province":"","reg_city":"unknow","reg_district":"","pic":"","token":"a8390597352cf827853227d215cafaa5","token_time":1544149582,"sign":"dQlPR7r5LKFpos9SItf1nNkpidVCLEgfP1h3iblEs","role_id":5,"balance":"758.00","total_income":"2.00","total_income_fy":"756.00","total_withdrawal":"0.00","position":"0","pro_code":"a72cc9ced95adcfd","longitude":null,"latitude":null,"income_amount":"758.00","teamCount":2,"role":{"id":5,"role_code":"140","role_name":"服务商","create_time":"2018-11-14 03:17:01","fee_rate":55,"price":"2980","comment":null,"fee_rate_explain":"0.55%"}}]}};
+					postdata.isloading = false;
+					// console.log(JSON.stringify(data));
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						plus.nativeUI.toast(data.msg);
+						let curdata = data.data.data;
+						if (bu && data.data.max_page == data.data.page) {
+							//参数为true代表没有更多数据了。
+							self.endPullUpToRefresh(true);
+							document.getElementsByClassName("mui-pull-loading")[0].innerText = "没有更多数据了";
+						}
+						if(data.data.max_page == vm.page){
+						}
+							document.getElementsByClassName("mui-pull-loading")[0].innerText = "没有更多数据了";
+						if (curdata == '') {
+							vm.level--;
+							mui.toast('已到最后层级!');
+							return;
+						}
+						mui('.mui-scroll-wrapper').scroll({
+							startX: 0,//初始化时滚动至x
+							startY: 0, //初始化时滚动至y
+							scrollY: true,//是否竖向滚动
+							scrollX: false, //是否横向滚动
+							indicators: true, //是否显示滚动条
+							// bounce: true //是否启用回弹
+						}).scrollTo(0,0,100);
+						vm.buddyList = curdata;
+					} else {
+						plus.nativeUI.toast(data.msg);
+					}
+				}, 'json')
+				
+			}
+
+			function da(id) {
+				var da = {};
+				var token = localStorage.logintoken;
+				//保存本地的数据
+				da["token"] = token;
+				da["id"] = id;
+				da["limit"] = 10;
+				da["page"] = vm.page++;
+
+				var signkey = localStorage.signkey;
+				var signcode = sign(da, signkey);
+
+				da['sign'] = signcode;
+				return da;
+			}
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					buddyList: [],
+					preId: [],
+					curId: null,
+					level: 1,
+					page:1
+				} ,
+				watch:{
+					page:function(news,old){
+						console.log("wanth"+news)
+						console.log("ssfdsaddf"+old)
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

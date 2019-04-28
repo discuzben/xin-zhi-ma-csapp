@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 760px;
+			}
+			.mui-table-view-cell{
+				height: 70px;
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+			}
+			.limit-right-top{
+				float: right;
+			}
+			.cardbot{
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-between;
+				/* margin-top: -10px; */
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">提现记录</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view item1ul" id="present-record">
+								<todo-item
+								  v-for="item in recordList"
+								  v-bind:todo="item"
+								  v-bind:key="item.id">
+								</todo-item>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script src="../../../js/md5.min.js"></script>		
+		<script src="../../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function()
+			{
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+// 				var hr = '<li class="mui-table-view-cell"><div class="mui-card-content"><div class="cardbot"><div class="present"><span class="present-title">余额提现</span><br><p class="present-time">2018-6-27 20:39:29</p></div><div class="limit"><span class="limit-right-top">-2133.0</span><br><p class="limit-right-bottom">提现到账成功</p></div></div></div></li>';
+// 				document.getElementById('item1mobile').querySelector('.item1ul').innerHTML = hr + hr + hr + hr + hr + hr + hr + hr + hr + hr + hr + hr + hr + hr + hr;
+					
+				var wrapper_height = mui('.mui-scroll-wrapper')[0].offsetHeight-20;
+				mui('.mui-scroll-wrapper')[0].style.height = wrapper_height+'px';
+				
+				var da ={};
+				var token=localStorage.logintoken;
+				//vue.js的数据
+				da["token"]=token;
+						
+				var signkey=localStorage.signkey;
+				var signcode=sign(da,signkey);
+				
+				da['sign']=signcode;
+				//提现记录
+				var url=address("/api/Fund/withdrawLog");
+				
+				mui.post(url,
+				da,
+				function(data){
+					console.log(JSON.stringify(data));
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						plus.nativeUI.toast(data.msg);
+						let curdata = data.data.data;
+						vm.recordList = curdata;
+						
+						// console.log(curdata[0].list);
+					}else{
+						plus.nativeUI.toast(data.msg);
+					}
+				},'json')
+			});
+			Vue.component('todo-item', {
+			  props: ['todo'],
+			  template: '<li class="mui-table-view-cell"><div class="mui-card-content"><div class="cardbot"><div class="present"><span class="present-title">余额提现</span><br><p class="present-time">{{todo.update_time_explain}}</p></div><div class="limit"><span class="limit-right-top">{{todo.coin_explain}}</span><br><p class="limit-right-bottom">{{todo.status_explain}}</p></div></div></div></li>'
+			})
+
+
+
+			var vm = new Vue({
+			  el: '#present-record',
+			  data: {
+				recordList: null
+			  }
+			})
+		</script>
+	</body>
+
+</html>

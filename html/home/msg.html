@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/iconfont.css" rel="stylesheet" />
+
+		<style>
+		.mui-table-view{
+			margin-top: 0px !important;
+		}
+		.mui-control-content {
+			background-color: white;
+			min-height: 760px;
+		}
+		.mui-scroll-wrapper{
+			
+		}
+		.mui-table-view-cell{
+			height: 70px;
+			margin: 10px 0;
+			border-bottom: 1px solid rgba(200,200,200,0.2);
+			border-top: 1px solid rgba(200,200,200,0.2);
+		}
+		
+		.cardbot{
+			/* height: 50px; */
+		}
+		.card-right{
+			width: 100%;
+		}
+		.present{
+			width: 100%;
+			height: 25px;
+			display: block;
+		}
+		.limit{
+			display: block;
+		}
+		.present-title{
+			float: left;
+			font-size: 12px;
+			padding: 0 5px;
+			color: white;
+			background-color: red;
+			border-radius: 5px;
+		}
+		.present-day-interest{
+			float: right;
+			font-size: 13px;
+			margin-right: 15px;
+			/* margin-top: 16px; */
+		}
+		.limit-left{
+			font-size: 13px;
+			margin-top: 5px;
+			float: left;
+			margin-right: 5px;
+		}
+		/* #slider{
+			border-radius: 20%;
+		} */
+		.appname{
+			float: left;
+			margin-right: 12px;
+			width: 30px;
+			height: 40px;
+			font-size: 20px;
+			text-align: center;
+			line-height: 40px;
+			border-radius: 20%;
+			color: goldenrod;
+		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">消息通知</h1>
+		</header>
+
+		<div class="mui-content">
+			<div id="slider" class="mui-slider touch-action">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1mobile">
+						全部
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						公告
+					</a>
+					<a class="mui-control-item" href="#item3mobile">
+						好友通知
+					</a>
+					<a class="mui-control-item" href="#item4mobile">
+						收益通知
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item1ul">
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-anquanshezhi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">系统公告</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-haoyouxiaoxi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">好友通知</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-shouyixiaoxi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">收益通知</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item2ul">
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-anquanshezhi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">系统公告</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item2ul">
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-haoyouxiaoxi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">好友通知</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item4mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item2ul">
+									<li class="mui-table-view-cell">
+										<a class="cardbot touch-action">
+											<div class="appname mui-icon iconfont icon-shouyixiaoxi"></div>
+											<div class="card-right">
+												<div class="present">
+													<span class="present-title">收益通知</span>
+													<p class="present-day-interest">2018/10/10 15:30</p>
+												</div>
+												<div class="limit">
+													<p class="limit-left">欢迎使用芯芝麻APP</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		
+		<script type="text/javascript">
+			mui.init()
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: true //是否显示滚动条
+			});
+			mui.plusReady(function(mui){
+				
+			});
+			
+		</script>
+	</body>
+
+</html>

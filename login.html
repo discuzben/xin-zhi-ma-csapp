@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<style>
+			body,div,.mui-content{
+				background: #FFFFFF;
+			}
+			.div_logininfo{
+				width: 90%;
+				margin-left: 5%;
+			}
+			.div_logo img{
+				width: 30%;
+				margin: 10px 0 10px 35%;
+			
+			}
+			.mui-input-row{
+				border-bottom: 1px solid gainsboro;
+				width: 86%;
+				margin-left: 7%;
+			}
+			.mui-input-row label
+			{
+				width: 25%;
+				padding: 11px 0;
+			}
+			.mui-input-row input{
+				float: left !important;
+			}
+			.btn_login{
+				float: left;
+				width: 85%;
+				margin-left: 7%;
+				margin-top: 50px;
+				background: #1b99dc;
+				
+			}
+			.btn_getvalidcode{
+				width: 30%;
+				float: right;
+				padding: 2px 3px;
+				margin-top: 9px;
+				background: #1B99DC;
+				color: #FFFFFF;
+				border-radius: 5px;
+				text-align: center;
+			}
+			.title-right{
+                color: #fff;
+                font-size: 15px;
+                font-weight: 500;
+                font-family: "微软雅黑";
+                float: right !important;
+                position: relative;
+                top: 25%;
+                right:5%;
+            }
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">登录</h1>
+			<h1 class="title-right" id="go-register">注册</h1>
+		</header>
+		<div class="mui-content">
+			<div id="div_logo" class="div_logo">
+				<img src="imgs/logo-2.png" />
+			</div>
+			<div id="div_logininfo">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>手机号：</label>
+							<input type="text" placeholder="请输入手机号" id="txt_phone">
+						</div>
+
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>验证码：</label>
+							<input type="text" placeholder="请输入码证码" style="width: 40%;" id="txt_vcode">
+							<a class="btn_getvalidcode" id="btn_getvalidcode">获取验证码</a>
+						</div>
+					</li>
+					<button type="button" class="mui-btn mui-btn-blue btn_login" id="btn_login">登 录</button>
+
+				</ul>
+			</div>
+			<input type="hidden" id="test_vcode" />
+			<div id="" style="margin: 100px 0 0 0;">
+				<p style="text-align: center;">登录即表示您已同意<a>《用户使用协议》</a>
+				</p>
+			</div>
+		</div>
+
+		<script src="js/mui.js"></script>
+		<script src="js/common.js"></script>
+		<script>
+			mui.init();
+			mui.plusReady(function() {
+				
+				//console.log('aaaa')
+
+				// 跳转注册页面
+				document.getElementById("go-register").addEventListener("tap", function(event) {
+					event.stopPropagation();
+					mui.openWindow({
+						url: 'register.html',
+						id: 'register',
+						createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							aniShow: 'slide-in-right', //页面显示动画，默认为”slide-in-right“；
+							//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+
+						}
+					})
+				})
+
+
+				//var indexpage=plus.webview.create("index.html");
+
+				//提交登录
+				document.getElementById("btn_login").addEventListener("tap", function() {
+					var phone = document.getElementById("txt_phone").value;
+					var vcode = document.getElementById("txt_vcode").value;
+					if(vcode == ""){
+						plus.nativeUI.toast("请输入验证码！");
+					}
+					var osname = plus.os.name;
+					var devuuid = plus.device.uuid;
+
+					var login = address('/api/Login/login');
+					mui.post(login, {
+							"phone": phone,
+							"vcode": vcode,
+							"osname": osname,
+							"uuid": devuuid
+						},
+						function(data) {
+							//console.log(JSON.stringify(data));
+							//return;
+							var token = data.data.token;
+							//                 console.log(typeof(token));
+							//                 console.log(token);
+							if (data.code == 1 && (typeof(token) != undefined)) {
+								//保存token本地
+								localStorage.logintoken=token;
+								localStorage.signkey=data.data.sign;
+								localStorage.userinfo=JSON.stringify(data.data);
+
+								console.log("logintoken:" + localStorage.logintoken);
+								console.log("signkey:" + localStorage.signkey);
+								plus.nativeUI.toast("登录成功！")
+								//plus.webview.open("index.html",);
+								mui.openWindow({
+									url: 'index.html',
+									id: 'indexpage',
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: true, //页面loaded事件发生后自动显示，默认为true
+										aniShow: 'zoom-fade-out', //页面显示动画，默认为”slide-in-right“；
+										//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+
+									}
+								})
+
+							} else {
+								plus.nativeUI.toast("手机号或者验证码有误！")
+							}
+
+						}, 'json')
+
+				});
+
+
+				//获取验证码
+				document.getElementById("btn_getvalidcode").addEventListener("tap", function() {
+					plus.nativeUI.showWaiting();
+					//获取验证码倒计时定时器
+					let btn_getvalidcode = document.getElementById("btn_getvalidcode");
+					
+					var phone = document.getElementById("txt_phone").value;
+					if (phone == "") {
+						plus.nativeUI.toast("请填写手机号码！");
+						plus.nativeUI.closeWaiting();
+						return false;
+					}
+					var sendVerifyCode = address("/api/login/loginVerifyCode ");
+
+					console.log(sendVerifyCode);
+					mui.post(sendVerifyCode, {
+							'phone': phone
+						},
+						function(data) {
+							countdownp(btn_getvalidcode,data.code);
+							plus.nativeUI.closeWaiting();
+							plus.nativeUI.toast("发送成功");
+							console.log(JSON.stringify(data));
+							// plus.nativeUI.toast(data.msg);
+						}, 'json')
+
+				})
+
+			})
+		</script>
+
+	</body>
+
+</html>

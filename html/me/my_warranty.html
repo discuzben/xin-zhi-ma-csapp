@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/preview.css" rel="stylesheet" />
+
+		<style>
+		.mui-table-view{
+			margin-top: 0px !important;
+		}
+		.mui-content{
+			position: relative;
+		}
+		.mui-content #bg{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+		}
+		.mui-content-padded{
+			position: absolute;
+		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">我的保单</h1>
+		</header>
+
+		<div class="mui-content">
+			<img id="bg" src="../../imgs/guaranty.jpg">
+			<!-- <div class="mui-content-padded"> -->
+				<!-- <p>保单二维码</p> -->
+				<!-- <p> -->
+					<img id="image_touch" style="float: center;position: absolute;left: 50%; margin-left: -150px;top: 100px;" src="../../imgs/mywarranty.jpg" data-preview-src="" data-preview-group="1" />
+				<!-- </p> -->
+				<!-- <p style="margin-top: 350px;">图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组其它图片，点击保存到手机相册中，使用微信点开扫码，链接到我的保单点击会关闭预览, -->
+				<!-- </p> -->
+			<!-- </div> -->
+		</div>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
+		
+		<script type="text/javascript">
+			mui.init()
+			mui.previewImage();
+			function saveImage(){
+				var imgUrl = document.getElementById("image_touch").src;
+				console.log(imgUrl);
+				plus.gallery.save(imgUrl, function(){
+					mui.toast('保存成功');
+				}, function(e){
+					mui.toast('保存失败: '+JSON.stringify(e));
+				});
+			}
+
+			mui.plusReady(function(){
+			
+			});
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 760px;
+			}
+			.mui-table-view-cell{
+				height: 80px;
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+				/* text-align: center; */
+			}
+			.mui-table-view-cell a{
+				height: 80px;
+				position: relative;
+			}
+			.mui-table-view-cell img{
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				margin: auto;
+			}
+			.cell-p{
+				position: relative;
+				float: left;
+				width: 100%;
+				text-align: center;
+				margin-top: 40px;
+			}
+			.cell-content{
+				text-align: center;
+				position: relative;
+				top:50%;
+				margin-top:-21px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">可添加邮箱</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view itemul" id="itemul">
+								<li class="mui-table-view-cell" v-for = 'item in mailList' @tap="open_addmail_detail(item.id)">
+									<a class="touch-action" v-if="item.name == 163">
+										<img  src="../../imgs/mail/163logo.gif" >
+									</a>
+									<a class="touch-action" v-else-if="item.name == 126">
+										<img src="../../imgs/mail/126logo.gif" >
+									</a>
+									<a class="touch-action" v-else-if="item.name === 'qq'">
+										<img src="../../imgs/mail/qqlogo.gif" >
+										<p class="cell-p">(需要获取QQ邮箱授权码)</p>
+									</a>
+									<a class="touch-action" v-else-if="item.name == 189">
+										<img src="../../imgs/mail/189logo.jpg" >
+									</a>
+									<a class="touch-action" v-else-if="item.name == 'sina'">
+										<img src="../../imgs/mail/sinalogo.jpg" >
+									</a>
+									<a class="touch-action" v-else>
+										<div class="cell-content">
+											<span>其他邮箱</span>
+											<p>(覆盖60万种)</p>											
+										</div>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				let Mailsupporturl = address('/api/Mail/support');
+				mui.post(Mailsupporturl,da(),function(data){
+					// console.log("支持的电子邮箱列表："+JSON.stringify(data));
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						let curdata = data.data;
+						vm.mailList = curdata;
+					plus.nativeUI.toast(data.msg);
+					}else{
+						plus.nativeUI.toast(data.msg);
+					}
+				},'json')
+				//预加载主计划页
+				add_mail_detail = mui.preload({
+					url: 'add_mail_detail.html',
+					id: 'add_mail_detail',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4"
+					}
+				});
+				
+			});
+			function open_addmail_detail(id) {
+				//触发子窗口传递下列数据变更计划主任务详情
+				mui.fire(add_mail_detail, 'get_addmail_detail', {
+					// console.log(item.id);
+					mailbox_id: id
+				});
+				setTimeout(function() {
+					add_mail_detail.show("slide-in-right", 300);
+				}, 150);
+			}
+			//请求体
+			function da(){
+				var da ={};
+				var token=localStorage.logintoken;
+				//保存本地的数据
+				var signkey=localStorage.signkey;
+				var signcode=sign(da,signkey);
+									
+				da['sign']=signcode;
+				return da;
+			}
+			var vm = new Vue({
+				el: '#itemul',
+					data: {
+						mailList: []
+					}
+			})
+		</script>
+	</body>
+
+</html>

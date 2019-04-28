@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="../css/mui.min.css" rel="stylesheet"/>
+    <link href="../css/common.css" rel="stylesheet"/>
+    <link href="../css/iconfont.css" rel="stylesheet"/>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/md5.min.js"></script>
+		<script type="text/javascript">
+		    mui.init()
+				let qrcodeimgSrc;
+				function plusReady(){
+					// 更新分享目标
+					plus.share.getServices(function(s){
+						for(var i in s){
+							shares[s[i].id]=s[i];
+							// console.log(JSON.stringify( s[i]));
+						}
+						var ss=shares['weixin'];
+						ss&&ss.nativeClient&&(shareBts.push({title:'微信朋友圈',s:ss,x:'WXSceneTimeline'}),
+						shareBts.push({title:'微信好友',s:ss,x:'WXSceneSession'}));
+						ss=shares['sinaweibo'];
+						ss&&shareBts.push({title:'新浪微博',s:ss});
+						//QQ分享待解决
+						ss=shares['qq'];
+						ss&&ss.nativeClient&&shareBts.push({title:'QQ',s:ss});
+						shareBts.push({title:'更多'});
+					},function(e){
+						console.log('updateShare failed: '+JSON.stringify(e));
+					});
+					
+					//请求获取二维码
+						var token=localStorage.logintoken;
+						//vue.js的数据
+						var da={};
+						da["token"]=token;
+
+						var signkey=localStorage.signkey;
+						var signcode=sign(da,signkey);
+						
+						da['sign']=signcode;
+						
+						var qrurl=address("/api/Misc/qrcode");
+						mui.post(qrurl,
+						da,
+						function(data){
+							// console.log(typeof data.data == 'undefined');
+							if (data.code == 1 && (typeof(token) != undefined)) {
+								// console.log(document.getElementById("qrcodeimg"));
+								if(data.data == 'undefined'){
+									return;
+								}
+								var qrcodeimg = document.createElement('img');
+								qrcodeimg.id = qrcodeimg;
+								qrcodeimg.src = data.data;
+								qrcodeimgSrc = data.data;
+								qrcodeimg.style.position = 'fixed';
+								qrcodeimg.style.bottom = '100px';
+								qrcodeimg.style.width = '120px';
+								qrcodeimg.style.height = '120px';
+								qrcodeimg.style.left = '50%';
+								qrcodeimg.style.marginLeft = '-60px';
+		
+								document.getElementsByClassName('mui-content')[0].appendChild(qrcodeimg);
+								
+								
+								plus.nativeUI.toast(data.msg);
+							}else{
+								plus.nativeUI.toast(data.msg);
+							}
+						},'json')
+				}
+				document.addEventListener("plusready",plusReady,false);
+				
+				// 判断是否为流应用环境
+				var bStream = navigator.userAgent.indexOf('StreamApp')>=0;
+				
+				// 分享应用
+				var shares={},shareBts=[];
+				//判断当前系统环境是否支持分享
+				var invitecode = JSON.parse(localStorage.userinfo);
+				invitecode = invitecode.pro_code;
+				// console.log(invitecode);
+				
+				let inviteUrl = "http://api2.xinzhima.cn/index.php/mobile/Login/showRegister?pro_code="+invitecode;
+				function share(stype){
+					//plus.nativeUI.actionSheet弹出系统选择按钮框
+					(shareBts.length>1)||('Android'!==plus.os.name&&shareBts.length>0)?plus.nativeUI.actionSheet({title:'邀请好友',cancel:'取消',buttons:shareBts},function(e){
+						(e.index>0)&&shareAction(shareBts[e.index-1],stype);
+					}):(shareBts.length>0?shareWithSystem():plus.nativeUI.alert('当前环境无法支持分享操作!'));
+				}
+				//添加分享内容
+				function shareAction(sb,st){
+					//sb.s?
+					//sb:{title:微信朋友圈;s:{"id":"weixin","description":"微信","authenticated":true,"accessToken":"","nativeClient":true};x:WXSceneTimeline}
+					// console.log(JSON.stringify(sb.s))
+					if(!sb.s){
+						shareWithSystem(st);
+						console.log('无效的分享服务');
+						return;
+					}
+					var msg={};
+					if(st == 'sa'){
+							msg.href=bStream?inviteUrl:inviteUrl;
+							msg.title = '邀请好友';
+							msg.content='资金不足找芯芝麻,雪中送炭信誉好！芯芝APP让手机变成POS机';
+							sb.x&&(msg.extra={scene:sb.x});
+							msg.thumbs=msg.pictures=['_www/imgs/logo.png'];
+							// console.log('share '+sb.title+' : '+JSON.stringify(msg));
+					}else{
+						msg={type:'text'};
+// 						if(!image_picture.realUrl){
+// 							plus.nativeUI.alert('请选择要分享的图片!');
+// 							return;
+// 						}
+						sb.x&&(msg.extra={scene:sb.x});
+						console.log(qrcodeimgSrc);
+						
+						msg.pictures=[qrcodeimgSrc];
+						msg.content='二维码邀请';
+					}
+					// authorize分享授权控件对象
+					sb.s.authenticated?shareMessage(sb.s,msg):sb.s.authorize(function(){
+						shareMessage(sb.s,msg);
+					},function(e){
+						plus.nativeUI.toast('取消分享!');
+					});
+				}
+				// 分享服务对象
+				function shareMessage(s,m){
+					console.log(JSON.stringify(s))
+					console.log(JSON.stringify(m));
+					s.send(m, function(){
+						plus.nativeUI.toast('完成分享!');
+					},function(e){
+						plus.nativeUI.toast('取消分享!');
+					});
+				}
+				//使用系统组件发送分享,否则调用nativejs
+				function shareWithSystem(){
+					plus.share.sendWithSystem?plus.share.sendWithSystem({
+						content:'资金不足找芯芝麻,雪中送炭信誉好！芯芝APP让手机变成POS机',
+						title:'邀请好友',
+						href:bStream?inviteUrl:inviteUrl,
+						pictures:('Android'==plus.os.name)?null:['_www/imgs/logo.png']
+					}):shareWithSystemNativeJS();
+				}
+				// 调用系统nativejs分享
+				function shareWithSystemNativeJS(){
+					var main = plus.android.runtimeMainActivity(),
+					Intent = plus.android.importClass('android.content.Intent'),
+					File = plus.android.importClass('java.io.File'),
+					Uri = plus.android.importClass('android.net.Uri');
+					var intent=new Intent(Intent.ACTION_SEND),
+					p=plus.io.convertLocalFileSystemURL('_www/imgs/share_img'),
+					f=new File(p),
+					uri=Uri.fromFile(f);
+					if(f.exists()&&f.isFile()){
+						intent.setType('image/*');
+						intent.putExtra(Intent.EXTRA_STREAM,uri);
+					}else{
+						intent.setType('text/plain');
+					}
+					intent.putExtra(Intent.EXTRA_SUBJECT,'邀请好友');
+					intent.putExtra(Intent.EXTRA_TEXT,'资金不足找芯芝麻,雪中送炭信誉好！芯芝APP让手机变成POS机('+(bStream?inviteUrl:inviteUrl)+')');
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					main.startActivity(Intent.createChooser(intent,'分享注册芯芝麻'));
+				}
+				
+				
+		</script>
+		<style>
+			.mui-content{
+				/* width: 100px;
+				height: 100px; */
+				/* position: relative; */
+				height: 100%;
+				width: 100%;
+			}
+			#btn_share{
+				color: white;
+				margin-right: 5px;
+			}
+			#shareBac{
+				/* margin-top: 44px; */
+				width: 100%;
+				height: 100%;
+				position: fixed;
+/* 				left: 50%;
+				top: 50%;
+				margin-top: 200px;
+				margin-left: 0px; */
+			}
+			#shareqrcode{
+				bottom: 60px;
+				left: 50%;
+				margin-left: -2.5rem;
+				position: fixed;
+				background-color: #FD913A;
+				color: white;
+				border-radius: 14px;
+				width: 5rem;
+				height: 2rem;
+				font-size: 12px;
+				font-weight: bold;
+			}
+			/* #qrcodeimg{
+				position: fixed;
+				bottom: 60px;
+				width: 120px;
+				height: 120px;
+				left: 9rem;
+			} */
+		</style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">添加好友</h1>
+		<span class="mui-icon iconfont icon-zhuanfa mui-pull-right" id="btn_share" onclick="share('sa')">
+		</span>
+</header>
+<div class="mui-content">
+    <img id="shareBac" src="../imgs/shareimg1.jpg" />
+		<button id="shareqrcode" type="button" class="mui-btn" style="" onclick="share()">点击分享</button>
+</div>
+
+<script type="text/javascript">
+// 	var mc = mui('.mui-content')[0].offsetHeight;
+			mui.plusReady(function() {
+				// native.js调用原生对象
+				// console.log(plus.android.invoke(plus.android.currentWebview(),'getHeight'));
+				//减去顶部状态栏和底部选择栏加上屏幕误差范围
+				// console.log(plus.screen.resolutionHeight);
+				// console.log(JSON.stringify(plus.webview.currentWebview().getStyle())); 
+				mui('#shareBac')[0].style.height = plus.screen.resolutionHeight-plus.navigator.getStatusbarHeight()-50+3 + 'px';
+			});
+</script>
+</body>
+
+</html>

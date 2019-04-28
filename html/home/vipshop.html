@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+		.mui-table-view{
+			margin-top: 0px !important;
+		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+		    <h1 class="mui-title">唯品会</h1>
+		</header>
+
+		<div class="mui-content">
+	
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/immersed.js"></script>
+		<script src="../../js/common.js"></script>
+		
+		<script type="text/javascript">
+			mui.init();
+
+			var topoffset='125px',wn=null;
+			
+			function showWebview(){
+				// 创建新窗口
+				wn=plus.webview.create(vipUrl(), 'vipshop',{top:topoffset,bottom:'0px',position:'dock',dock:'bottom',bounce:'vertical'});
+				wn.show('none');
+			}
+			mui.plusReady(function(){
+				if(plus.navigator.isImmersedStatusbar()){//immersed״
+					topoffset=(Math.round(plus.navigator.getStatusbarHeight())+45)+'px';
+					console.log(plus.navigator.getStatusbarHeight());
+				}
+				showWebview();
+			});
+			
+		</script>
+	</body>
+
+</html>

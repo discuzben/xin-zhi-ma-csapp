@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet"/>
+		<link href="../../css/iconfont.css" rel="stylesheet"/>
+		<style>
+			.mui-content{
+				position: relative;
+			}
+			.mui-content img{
+				width: 100%;
+				height: 100%;
+				position: fixed;
+			}
+			#myCanvas{
+				position: absolute;
+			}
+			.mui-content p{
+				width: 100%;
+				height: 30px;
+				position: absolute;
+				text-align: center;
+				color: darkgoldenrod;
+			}
+			.p1{
+				top: 360px;
+			}
+			.p2{
+				top: 390px;
+			}
+			.p3{
+				top: 420px;
+			}
+			.p4{
+				top: 450px;
+			}
+			.p5{
+				top: 480px;
+			}
+			.p6{
+				top: 510px;
+			}
+			.p7{
+				top: 540px;
+			}
+			.p8{
+				top: 570px;
+			}
+			.p9{
+				top: 600px;
+			}
+			.p10{
+				top: 630px;
+			}
+			.p11{
+				top: 660px;
+			}
+			#btn-my-score{
+				color: white;
+				font-size: 14px;
+				float: right;
+				margin-right: 10px;
+			}
+			#mb{
+				line-height: 44px;
+			}
+			.scorenum{
+				position: absolute;
+				width: 100%;
+				text-align: center;
+				top: 180px;
+				font-size: 40px;
+				color: darkgoldenrod;
+			}
+			.scorenum-tip{
+				font-size: 16px;
+				position: absolute;
+				color: darkgoldenrod;
+				text-align: center;
+				top: 220px;
+				width: 100%;
+			}
+			.anim{
+				position: relative;
+				width: 240px;
+				height: 240px;
+				border-radius: 50%;
+				/* border: 1px solid #f00; */
+				box-sizing: border-box;
+				margin: 50px auto 0;
+			} 
+			.anim li{
+				position: absolute;
+				z-index: 2;
+				left: 50%;
+				top: 0;
+				width: 40px;
+				height: 40px;
+				margin: -20px 0 0 -20px;
+				/* border: 1px solid #f00; */
+				/*border-radius: 50%;*/
+				box-sizing: border-box;
+				list-style: none;
+				transform-origin: 20px 140px;
+				text-align: center;
+				line-height: 40px;
+			}
+			.iconwater{
+				color: rgba(0,0,0,.3);
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="mb">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">信用分</h1>
+			<a id="btn-my-score">明细</a>
+		</header>
+		<div class="mui-content">
+			<img src="../../imgs/credit_score_bac.jpg" >
+			<ul class="anim" id="box">
+				<!-- <li>
+					<span class="mui-icon iconfont icon-water-drop"></span>
+				</li>
+				<li><span class="mui-icon iconfont icon-water-drop"></span></li>
+				<li><span class="mui-icon iconfont icon-water-drop"></span></li>
+				<li><span class="mui-icon iconfont icon-water-drop"></span></li>
+				<li><span class="mui-icon iconfont icon-water-drop"></span></li> -->
+			</ul>
+			<span class="scorenum">800</span>
+			<span class="scorenum-tip">评估时间：2018-11-01</span>
+			<p class="p1">信用分</p>
+			<p class="p2">是芯芝麻打造自有核心的信用体系</p>
+			<p class="p3">以收益和利润为参照</p>
+			<p class="p4">依托信用分 可以展开无限的想象</p>
+			<p class="p5">信贷</p>
+			<p class="p6">分期</p>
+			<p class="p7">免抵押</p>
+			<p class="p8">信用分抵押</p>
+			<p class="p9">信用分置换</p>
+			<p class="p10">......</p>
+			<p class="p11">在芯芝麻，高分值的你就是王！</p>
+		</div>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			
+			//信用分动画编写
+			//绘制画面
+			var liSize = 20,li = '';
+			for(var i=liSize/2+2; i<liSize; i++) {
+				li += '<li style="transform: rotate('+360/liSize*i+'deg)"><span class="iconwater mui-icon iconfont icon-water-drop"></li>';
+			}
+			for(var i=0; i<liSize/2-1; i++) {
+				li += '<li style="transform: rotate('+360/liSize*i+'deg)"><span class="iconwater mui-icon iconfont icon-water-drop"></li>';
+			}
+			var cc = document.getElementsByClassName('anim')[0];
+			cc.innerHTML = li;
+			
+			//定时器控制动画
+			var int=self.setInterval("clock()",100),liindex=0,scorenum = 800;
+			function clock(){
+			   cc.children[liindex].querySelector("span").style.color = 'white';
+			   liindex++;
+			   var sc = Math.ceil(scorenum/(liSize-3)*liindex);
+			   document.getElementsByClassName('scorenum')[0].innerHTML = sc;
+			   if(liindex == 17){
+				   clearInterval(int);
+			   }
+			}
+			
+// 			mui(".mui-content p").each(function (index,item) {
+// 				console.log("sss");
+// 				mui(".mui-content").querySelector("p")[index].style.top = index*10 + "px";
+// 			});
+		</script>
+	</body>
+
+</html>

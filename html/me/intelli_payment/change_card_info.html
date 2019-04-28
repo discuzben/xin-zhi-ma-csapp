@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <link href="../../../css/mui.css" rel="stylesheet" />
+    <link href="../../../css/common.css" rel="stylesheet" />
+
+    <style>
+        .mui-table-view{
+            margin-top: 0px !important;
+        }
+        .mui-control-content {
+            background-color: white;
+            min-height: 760px;
+        }
+        .mui-scroll-wrapper{
+            /* margin-top: 4px; */
+        }
+        .mui-table-view-cell {
+            border-bottom: 1px solid rgba(200,200,200,0.2);
+            font-size: 15px;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 15px;
+        }
+        .mui-table-view-cell label{
+            float: left;
+            width: 21%;
+            margin-left: 8px;
+        }
+        .mui-table-view-cell input{
+            height: 60px;
+            float: left;
+            font-size: 15px;
+            width: 75%;
+            border: none;
+            text-align: left;
+        }
+        .btn-change-card-info{
+            color: white;
+            background-color: #007AFF;
+            width: 95%;
+            height: 30px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+    <h1 class="mui-title">修改卡信息</h1>
+</header>
+
+<div class="mui-content">
+    <div id="slider" class="mui-slider touch-action">
+        <div class="mui-slider-group">
+            <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+                <div id="scroll1" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <ul class="mui-table-view item1ul" id="updatecredit">
+                            <li class="mui-table-view-cell" >
+                                <label>信用卡号</label>
+								<span id="card-no"></span>
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <label>安全码</label>
+                                <input type="text" placeholder="请输入安全码" v-model="security_code">
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <label>有效期</label>
+                                <input type="text" placeholder="请输入有效期" v-model="expired_time">
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <label>账单日</label>
+                                <input type="text" placeholder="请输入账单日" v-model="bill_day">
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <label>还款日</label>
+                                <input type="text" placeholder="请输入还款日" v-model="repayment_day">
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <label>信用额度</label>
+                                <input type="text" placeholder="请输入信用额度" v-model="credit_balance">
+                            </li>
+                        </ul>
+                        <button type="button" class="mui-btn mui-btn-outlined btn-change-card-info" id="CardInfoChange">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/common.js"></script>
+<script src="../../../js/md5.min.js"></script>
+<script src="../../../js/vue.min.js"></script>
+<script src="../../../js/me/intelli_payment/change_card_info.js"></script>
+<script type="text/javascript">
+	mui.init();
+	mui.plusReady(function() {
+		let cardId;
+		//监听上级页面传递过来的卡id
+		document.addEventListener('get_change_card_info', function(event) {
+			if (event.detail.cardId == '' || event.detail.cardId == 'undefind') {
+				return;
+			}
+			cardId = event.detail.cardId;
+			// console.log(cardId);
+			//根据卡id获取卡信息
+			let cardUrl = address('/api/BankCard/creditCard');
+			mui.post(cardUrl,
+				da(cardId),
+				function(data) {
+					// console.log(JSON.stringify(data));
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						let curdata = data.data;
+						document.getElementById("card-no").innerHTML = dealdata(curdata.card_no);
+						plus.nativeUI.toast(data.msg);
+					} else {
+						plus.nativeUI.toast(data.msg);
+					}
+				}, 'json')
+		});
+		
+		document.getElementById("CardInfoChange").addEventListener("tap", function() {
+			let Url = address('/api/BankCard/editCreditCard');
+			mui.post(Url,
+				da(cardId),
+				function(data) {
+					// console.log(JSON.stringify(data));
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						let curdata = data.data.data;
+						plus.nativeUI.toast(data.msg);
+						// 返回后更新卡列表页面
+						var targetview = plus.webview.getWebviewById('my_bag');
+						targetview.reload();
+						mui.back();
+					} else {
+						plus.nativeUI.toast(data.msg);
+					}
+				}, 'json')
+		});
+	});
+	//对请求到的数据处理
+	function dealdata(d){
+		if(d.length == 0){
+			return;
+		}
+		let s = d.slice(0,4)+'*********'+d.slice(d.length-4,d.length);
+		return s;
+	}
+	function da(id) {
+		var da = {};
+		var token = localStorage.logintoken;
+		//保存本地的数据
+		da["token"] = token;
+		da["id"] = id;
+		da["security_code"] = vm.security_code;
+		da["expired_time"] = vm.expired_time;
+		da["bill_day"] = vm.bill_day;
+		da["repayment_day"] = vm.repayment_day;
+		da["credit_balance"] = vm.credit_balance;
+		var signkey = localStorage.signkey;
+		var signcode = sign(da, signkey);
+		da['sign'] = signcode;
+		return da;
+	}
+	var vm = new Vue({
+		el: '#updatecredit',
+		data: {
+			security_code: null,
+			expired_time: null,
+			bill_day: null,
+			repayment_day: null,
+			credit_balance: null
+		}
+	});
+	
+</script>
+
+
+</body>
+
+</html>

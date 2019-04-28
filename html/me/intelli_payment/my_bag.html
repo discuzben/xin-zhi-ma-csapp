@@ -1,0 +1,349 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+		<style>
+			.mui-active {
+				color: #1b99dc;
+			}
+			.mui-card
+			{
+				border-radius: 5px;
+			}
+			
+			.mui-card  .bank_logo
+			{
+				width: 40px !important;
+				height: 40px;
+			}
+			
+			.mui-slider-item
+		{
+			border-bottom: 0px !important;
+		}
+		
+			.mui-card-header:after,.mui-card-footer:before{
+				height: 0px;
+			}
+			.mui-card-content .mui-table-view{
+				margin-left: 1rem;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">信用卡管理</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-slider">
+				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item touch-action" href="#item1" id="btn_load_credit_card">信用卡</a>
+					<a class="mui-control-item touch-action" href="#item2" id="btn_load_bank_card">使用说明</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
+				<div class="mui-slider-group">
+					<div id="item1" class="mui-slider-item mui-control-content mui-active">
+						<ul class="mui-table-view">
+							<div class="mui-card" v-for="card in cards ">
+								<!--页眉，放置标题-->
+								<div class="mui-card-header">
+									<img class="bank_logo" v-bind:src="'../../../imgs/credit/'+card.bank.logo" />
+
+									<span>{{card.bank_name}}</span>
+									<button type="button" class="btn_unbind" v-bind:cardno="card.card_no">解 绑</button>
+								</div>
+								<!--内容区-->
+								<div class="mui-card-content">
+									<li class="mui-table-view">{{card.card_no}}</li>
+									<li class="mui-table-view">
+										<span>账单日{{card.bill_day}}日</span>
+										<span>还款日{{card.repayment_day}}日</span>
+									</li>
+								</div>
+								<!--页脚，放置补充信息或支持的操作-->
+								<div class="mui-card-footer">
+									<button type="button" @tap = "openChangeCardInfo(card)">修改信息</button>
+									<button type="button" class="btn_plan_log" v-bind:cardid="card.id">预约列表</button>
+									<button type="button" class="btn_replay_plan" v-bind:cardid="card.id">预约还款</button>
+								</div>
+							</div>
+
+
+						</ul>
+					</div>
+					<div id="item2" class="mui-slider-item mui-control-content">
+						<ul class="mui-table-view">
+
+
+
+
+
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/vue.min.js"></script>
+		<script src="../../../js/md5.min.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var ltoken = localStorage.logintoken;
+			var signkey = localStorage.signkey;
+			
+			function openChangeCardInfo(item) {
+				mui.fire(change_card_info, 'get_change_card_info', {
+					cardId: item.id
+				});
+				setTimeout(function() {
+					change_card_info.show("slide-in-right", 300);
+				}, 150);
+			}
+			function load_credit_card() {
+				var data = {
+					token: ltoken
+				}
+
+				var signcode = sign(data, signkey);
+				//console.log(signcode)
+				data['sign'] = signcode;
+
+				//console.log(JSON.stringify(data));
+				var url = address("/api/BankCard/creditCards");
+				//console.log(url);
+				mui.post(url,
+					data,
+					function(data) {
+						// console.log(JSON.stringify(data));
+						vm1.$data.cards = data.data;
+
+						//console.log(JSON.stringify(vm1.$data.cards));
+					}, 'json')
+
+			}
+
+			//打开绑卡页面;
+			function openBindPage(cardid) {
+				//
+				var bcu_url = address_pay("/index/leshuapay/BindUnionCard");
+				var b_data = {
+					"cardid": cardid,
+					"channel_id": 1
+				};
+
+				mui.post(bcu_url, b_data, function(data) {
+					//console.log(JSON.stringify(data));
+
+					if (data.code == 1 && data.data.bcuid > 0) {
+						//id记录到localstorage中传输过去;
+						localStorage.bcuid = data.data.bcuid;
+						mui.openWindow({
+							url: "card_bind.html",
+							id: "card_bind",
+						})
+
+					} else {
+						mui.alert(data.msg, "温馨提示");
+
+					}
+					plus.nativeUI.closeWaiting();
+				})
+			}
+
+
+			mui.plusReady(function() {
+
+				//打开页面时载入所有的信用卡信息
+				load_credit_card();
+
+				//预约列表
+				var url = address_pay("/index/leshuapay/isBind");
+				mui('.mui-table-view').on('tap', '.btn_plan_log', function() {
+					plus.nativeUI.showWaiting();
+					var cardid = this.getAttribute("cardid");
+					var data = {
+						'cardid': cardid,
+						'channelid': 1
+					}
+					mui.post(
+						url,
+						data,
+						function(data) {
+
+							//
+							if (data.code == 0) {
+								//绑定授权
+								mui.confirm(data.msg, "温馨提示", null, function(e) {
+									//
+									if (e.index == 1) {
+										//打开授权页;
+										//console.log('授权')
+										openBindPage(cardid);
+									}
+								});
+
+							} else {
+								//打开还款计划页面
+								mui.openWindow({
+									url: "repayment_plan_list.html",
+									id: "repayment_plan_list",
+									extras: {
+										cardid: cardid,
+									}
+								})
+							}
+							plus.nativeUI.closeWaiting();
+
+						}, "json"
+					)
+				})
+
+
+				//预约还款
+				var url = address_pay("/index/leshuapay/isBind");
+				mui('.mui-table-view').on('tap', '.btn_replay_plan', function() {
+
+					plus.nativeUI.showWaiting();
+
+					var cardid = this.getAttribute("cardid");
+					var data = {
+						'cardid': cardid,
+						'channelid': 1
+					};
+
+					//检查是否是第一次使用
+					mui.post(
+						url,
+						data,
+						function(data) {
+
+							//console.log(JSON.stringify(data));
+							//
+							if (data.code == 0) {
+								//绑定授权
+								mui.confirm(data.msg, "温馨提示", null, function(e) {
+									//
+									if (e.index == 1) {
+										//打开授权页;
+										//console.log('授权')
+										openBindPage(cardid);
+									}
+									plus.nativeUI.closeWaiting();
+
+								});
+
+
+
+							} else if (data.code == 1) {
+								//打开设置还款计划页面
+								plus.nativeUI.closeWaiting();
+
+								mui.openWindow({
+									url: "repayment_setPlan.html",
+									id: "repayment_setPlan",
+									extras: {
+										cardid: cardid,
+									}
+								});
+								plus.nativeUI.closeWaiting();
+							} else if (data.code == 2) {
+								plus.nativeUI.alert(data.msg);
+								plus.nativeUI.closeWaiting();
+							}
+
+
+						}, "json"
+					)
+
+				})
+
+
+				//解绑
+				mui('.mui-table-view').on('tap', '.btn_unbind', function() {
+					//console.log('unbind')
+					plus.nativeUI.showWaiting();
+					var cardno = this.getAttribute("cardno");
+					mui.confirm('确认要解除绑定吗？', "温馨提示", null, function(e) {
+						//
+						if (e.index == 1) {
+
+							var data = {
+								'card_no': cardno,
+								'channel_id': 1
+							};
+
+							//解绑卡业务
+							var url = address_pay("/index/leshuapay/UnbindQuickCard");
+							mui.post(
+								url,
+								data,
+								function(data) {
+									//
+									mui.alert(data.msg, "温馨提示");
+									if (data.code == 1) {
+										//如查解绑成功,刷新当前页面;
+										load_credit_card();
+									}
+
+									plus.nativeUI.closeWaiting();
+
+								}, "json"
+							)
+
+						} else {
+							plus.nativeUI.closeWaiting();
+						}
+
+					})
+
+
+				})
+				
+				// 预加载修改卡信息页
+				change_card_info = mui.preload({
+					url: 'change_card_info.html',
+					id: 'change-card-info',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4"
+					}
+				});
+			})
+
+
+
+
+			//	var userinfo=JSON.parse(localStorage.userinfo);
+
+			//console.log(localStorage.userinfo);
+
+			/**
+			 * 信用卡列表的界面渲染
+			 */
+			var vm1 = new Vue({
+				el: '#item1',
+				data: {
+					cards: []
+				},
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

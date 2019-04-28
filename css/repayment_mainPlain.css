@@ -1,0 +1,13 @@
+.done-time>span,.plan-money>span,.actual-money>span{
+    margin-left: 2.5rem;
+}
+.plan-money>span,.actual-money>span{
+    font-size: 1.4rem;
+    color: red;
+}
+.done-time{
+    /*background-color: #e7136a;*/
+}
+.mui-table-view-cell>div{
+    margin: 0.2rem 0 0.6rem 0.2rem;
+}

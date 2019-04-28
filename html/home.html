@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>home</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style type="text/css">
+			.mui-content>.mui-table-view:first-child {
+				/* margin-top: -1px; */
+			}
+
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+		</style>
+		<style type="text/css">
+			.cardholder{
+				/* margin-right: 10px; */
+			}
+			.cardbot{
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-between;
+				/* margin-top: -10px; */
+			}
+			.limit-time-left{
+				float: left;
+				font-size: 30px;
+				color: red;
+				line-height: 42px;
+				margin-right: 5px;
+			}
+			.limit-time-right{
+				float: right;
+			}
+			.unbind{
+				float: right;
+				background-color: #1B99DC;
+				font-size: 12px;
+				height: 32px;
+				color: white;
+			}
+			[v-cloak] {
+			display: none;
+			}
+		</style>
+		<link href="../css/font-awesome.min.css" />
+		<link href="../css/iconfont.css" rel="stylesheet" />
+		<link href="../css/common.css" rel="stylesheet" />
+		<link href="../css/home.css" rel="stylesheet" />
+		<!-- <link href="../css/me.css" rel="stylesheet"/> -->
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav mepage-bar-nav home-bar-nav">
+			<a class="mui-pull-left mepage-help touch-action" id="help-center">
+				<span class="mui-icon iconfont icon-kefu" style="font-size: 12px;padding-top: 0;"> 在线客服</span>
+			</a>
+			<h1 class="mui-title">芯芝麻</h1>
+			<a class="mui-pull-right mepage-setting home-bar-nav" id="home-btn-msg">
+				<span class="home-xiaoxi-text mui-icon iconfont icon-xiaoxi" style="font-size: 12px;padding-top: 0;"> 消息</span>
+			</a>
+		</header>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron" id="test-s">
+					<ul class="mui-table-view mui-grid-view mui-grid-4">
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="icon_qrcode">
+								<span class="mui-icon iconfont icon-saoyisao m-9"></span>
+								<div class="mui-media-body">扫一扫</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#">
+								<span class="mui-icon iconfont icon-fukuanma m-9"></span>
+								<div class="mui-media-body">付款码</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="erchant-gmoney">
+								<span class="mui-icon iconfont icon-shanghushoukuan m-9"></span>
+								<div class="mui-media-body text-shanjiask">商户收款</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="merchant-entry">
+								<span class="mui-icon iconfont icon-shanghuruzhu m-9"></span>
+								<div class="mui-media-body txet-shanjiarz">商户入驻</div>
+							</a>
+						</li>
+					</ul>
+
+					<!--
+					        作者：jfeng.li@qq.com
+					        时间：2018-10-16
+					        描述：功能区
+					    -->
+
+					<ul class="mui-table-view mui-grid-view mui-grid-8">
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="rapid_lending">
+								<span class="mui-icon iconfont icon1 icon-jisudaikuan"></span>
+								<div class="mui-media-body">极速借贷</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="credit_card_applications">
+								<span class="mui-icon iconfont icon2 icon-xinyongqiashenqing"></span>
+								<div class="mui-media-body">借用卡申请</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="credits-exchange">
+								<span class="mui-icon iconfont  icon3 icon-jifenduihuan"></span>
+								<div class="mui-media-body">积分兑换</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="vipshop">
+								<span class="mui-icon  iconfont icon-shangcheng  icon4"></span>
+								<div class="mui-media-body">唯品会</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="account_query">
+								<span class="mui-icon  iconfont icon-zhangdanchaxun  icon5"></span>
+								<div class="mui-media-body">账单查询</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="credit_score">
+								<span class="mui-icon iconfont icon-icon-test icon6"></span>
+								<div class="mui-media-body">信用分</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="mpos">
+								<span class="mui-icon iconfont icon7 icon-POSji"></span>
+								<div class="mui-media-body">MPOS</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+							<a href="#" id="suggestionfeedback">
+								<span class="mui-icon iconfont icon-111 icon8"></span>
+								<div class="mui-media-body">建议反馈</div>
+							</a>
+						</li>
+					</ul>
+
+
+					<div class="slider-content">
+						<div id="slider" class="mui-slider homepage-banner">
+							<div class="mui-slider-group mui-slider-loop">
+								<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="../imgs/bn1.png">
+									</a>
+								</div>
+								<!-- 第一张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../imgs/bn2.png">
+									</a>
+								</div>
+								<!-- 第二张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../imgs/bn1.png">
+									</a>
+								</div>
+								<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="../imgs/bn2.png">
+									</a>
+								</div>
+							</div>
+							<div class="mui-slider-indicator">
+								<div class="mui-indicator mui-active"></div>
+								<div class="mui-indicator"></div>
+
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="mui-slider-item mui-slider-item-duplicate homepage-adimg">
+									<a href="#">
+										<img src="../imgs/ad1.png">
+									</a>
+								</div> -->
+
+					
+					<ul class="mui-table-view">
+						<!--
+								作者：discuzben.lg@qq.com
+								时间：2018-12-13
+								描述：账单显示区
+							-->
+						<li class="mui-table-view-cell" v-for="item in accountList" style="padding: 10px;height: 100px;" v-cloak>
+							<div class="account-left-t" style="display: block;width: 100%;height: 25px;">
+								<img class="fl" :src="'../imgs/credit/' + item.bank.logo" style="width: 25px;height: 25px;">
+								<span class="fl">{{item.bank.bank_name}}</span>
+							</div>
+							<div class="bocon mui-row" style="width: 100%;height: 60px;margin-top: 10px;">
+								<div class=" mui-col-sm-4 mui-col-xs-4">
+									<div class="">
+										<span class="mui-col-sm-12 mui-col-xs-12" style="display: block;">{{ item.bill_amount }}</span>
+										<span class="mui-col-sm-12 mui-col-xs-12">本期账单</span>
+									</div>
+								</div>
+								<div class=" mui-col-sm-4 mui-col-xs-4">
+									<div class="" style="float: left;display: inline;">
+										<div>
+											<span class="" style="">还款日 {{ item.last_date }}</span>
+											<span class="">账单日 {{ item.start_date }}</span>
+										</div>
+									</div>
+								</div>
+								<span class="account-icon mui-icon iconfont icon-bangzhuzhongxin" @tap="openHelp()"></span>
+
+								<div class=" mui-col-sm-4 mui-col-xs-4" style="width: 50px;float: right;margin-right: 30px;">
+									<button type="button" class="toaccount" @tap="ImmediateRepayment(item)">立即还款</button>
+								</div>
+							</div>
+						</li>
+						<!--
+								作者：discuzben.lg@qq.com
+								时间：2018-12-13
+								描述：信用卡显示区
+							-->
+						<li class="mui-table-view-cell" v-for="item in creditList" style="padding: 10px;height: 100px;" v-cloak>
+							<div class="account-left-t" style="display: block;width: 100%;height: 25px;">
+								<img class="fl" :src="'../imgs/credit/' + item.bank.logo" style="width: 25px;height: 25px;">
+								<span class="fl">{{item.bank_name}}</span>
+							</div>
+							<div class="bocon mui-row" style="width: 100%;height: 60px;margin-top: 10px;">
+								<div class=" mui-col-sm-4 mui-col-xs-4">
+									<div class="">
+										<span class="mui-col-sm-12 mui-col-xs-12" style="display: block;">{{ item.card_no }}</span>
+										<span class="mui-col-sm-12 mui-col-xs-12">信用卡</span>
+									</div>
+								</div>
+								<div class=" mui-col-sm-4 mui-col-xs-4">
+									<div class="" style="float: left;display: inline;">
+										<div>
+											<span class="" style="">额度{{ item.credit_blance }} </span>
+											<span class=""> {{  }}</span>
+										</div>
+									</div>
+								</div>
+								<span class="account-icon mui-icon iconfont icon-bangzhuzhongxin" @tap="openHelp()"></span>
+
+								<div class=" mui-col-sm-4 mui-col-xs-4" style="width: 50px;float: right;margin-right: 30px;">
+									<button type="button" class="toaccount" @tap="ImmediateRepayment(item)">立即还款</button>
+								</div>
+							</div>
+						</li>
+					</ul>
+					</ul>
+			</div>
+		</div>
+
+		<style>
+			.updateProDiv{
+				height: 50px;
+				width: 100%;
+				line-height: 50px;
+				position: absolute;
+				top:40%;
+				text-align: center;
+				color: #007AFF;
+			}
+			
+			#proDownFile{
+				width: 95%;
+			}
+			.mui-backdrop{
+				display: none;
+			}
+			
+		</style>
+		<div class="mui-backdrop" id="down_progress">
+			<div class="updateProDiv">
+				<progress value="" max="" id="proDownFile"></progress>
+				<span class="persent"></span>
+			</div>
+		</div>
+		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js"></script>
+		<script src="../js/md5.min.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script src="../js/jquery-2.1.1.min.js"></script>
+		<script src="../js/mui.pullToRefresh.js"></script>
+		<script src="../js/mui.pullToRefresh.material.js"></script>
+
+		<script>
+			mui.init();
+			var vm = new Vue({
+				el: '#test-s',
+				data: {
+					accountList: [],
+					creditList:[],
+					page: 1
+				}
+			});
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: true //是否显示滚动条
+			});
+			mui('#test-s').pullToRefresh({
+				up: {
+					callback: function() {
+						let self = this;
+						setTimeout(function() {
+							vmdata.call(self, da(10));
+							self.endPullUpToRefresh();
+						}, 1000);
+					},
+					auto: true,
+					show: true
+				}
+			})
+
+			function vmdata(postdata) {
+				if (vmdata.isloading == true) {
+					return;
+				}
+				vmdata.isloading = true;
+				//请求历史列表信息流
+				let billUrl = address("/api/Bill/list");
+				let self = this;
+				mui.post(billUrl,
+					postdata,
+					function(data) {
+						console.log(JSON.stringify(data));
+						if(data == null){
+							data = {};
+						}
+						vmdata.isloading = false;
+						if(data.data.count == 0){
+							//如果请求账单没有数据,则改换请求信用卡信息
+							cardpost.call(self,postdata);
+							return;
+						}
+						if (data.data.max_page == data.data.page) {
+							//参数为true代表没有更多数据了。
+							self.endPullUpToRefresh(true);
+						}
+						if (data.code == 1 && (typeof(token) != undefined)) {
+							let curdata = data.data.data;
+							// plus.nativeUI.toast(data.msg);
+							vm.accountList = vm.accountList.concat(curdata);
+						} else {
+							// plus.nativeUI.toast(data.msg);
+						}
+					}, 'json')
+			}
+			function cardpost(postdata){
+				let creditUrl = address("/api/BankCard/creditCards");
+				delete postdata.page;
+				delete postdata.limit;
+				let self = this;
+				mui.post(creditUrl,
+					postdata,
+					function(data) {
+						console.log(JSON.stringify(data));
+						vmdata.isloading = false;
+						if (data.data.max_page == data.data.page) {
+							//参数为true代表没有更多数据了。
+							self.endPullUpToRefresh(true);
+						}
+						
+						if (data.code == 1 && (typeof(token) != undefined)) {
+							let curdata = data.data;
+							// plus.nativeUI.toast(data.msg);
+							//处理获取到的数据
+							mui.each(curdata,function(index,item){
+								item.card_no = dealdata(item.card_no);
+							})
+							vm.creditList = vm.creditList.concat(curdata);
+						} else {
+							// plus.nativeUI.toast(data.msg);
+						}
+					}, 'json')
+			}
+			//对请求到的数据处理
+			function dealdata(d){
+				if(d.length == 0){
+					return;
+				}
+				let s = d.slice(0,4)+'*********'+d.slice(d.length-4,d.length);
+				return s;
+			}
+			//请求体
+			function da(limit) {
+				var da = {};
+				var token = localStorage.logintoken;
+				//保存本地的数据
+				da["token"] = token;
+				da["page"] = vm.page++;
+				da["limit"] = limit;
+				var signkey = localStorage.signkey;
+				var signcode = sign(da, signkey);
+				da['sign'] = signcode;
+				return da;
+			}
+			//立即还款按钮打开我的卡包
+			function ImmediateRepayment(item) {
+				mui.fire(my_bag, 'get_mybag', {
+					// console.log(item.id);
+					accountid: item.id
+				});
+				setTimeout(function() {
+					my_bag.show("slide-in-right", 300);
+				}, 150);
+			}
+			//？号按钮打开预加载好的帮助中心
+			function openHelp() {
+				mui.fire(help_center, 'get_help_center', {
+					// accountid: item.id
+				});
+				setTimeout(function() {
+					help_center.show("slide-in-right", 300);
+				}, 150);
+			}
+			//添加唯品会预加载网页
+			var ws = null;
+			mui.plusReady(function() {
+				ws = plus.webview.currentWebview();
+				// 预加载唯品会页面
+				plus.webview.prefetchURL(vipUrl());
+				//帮助中心
+				//预加载主计划页
+				my_bag = mui.preload({
+					url: 'me/intelli_payment/my_bag.html',
+					id: 'my-bag',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4"
+					}
+				});
+				// 预加载帮助中心
+				help_center = mui.preload({
+					url: 'home/help_center.html',
+					id: 'help-center',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4"
+					}
+				});
+				//帮助中心
+				document.getElementById("help-center").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/help_center.html',
+						id: 'home-help-center',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//商户收款
+				document.getElementById("erchant-gmoney").addEventListener('tap', function() {
+					mui.alert('', '');
+				});
+				//商户入驻
+				document.getElementById("merchant-entry").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/merchant_entry.html',
+						id: 'home-merchant-entry',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//急速借贷
+				document.getElementById("rapid_lending").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/rapid_lending.html',
+						id: 'home-rapid-lending',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//借用卡申请
+				document.getElementById("credit_card_applications").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/credit_card_applications.html',
+						id: 'home-credit-card-applications',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//积分兑换
+				document.getElementById("credits-exchange").addEventListener('tap', function() {
+					mui.alert('功能建设中，敬请期待...', '积分兑换');
+				});
+				//唯品会
+				document.getElementById("vipshop").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/vipshop.html',
+						id: 'home-vipshop',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//账单查询
+				document.getElementById("account_query").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/show_mail.html',
+						id: 'show-mail',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//信用分
+				document.getElementById("credit_score").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/credit_score.html',
+						id: 'credit-score',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//MPOS
+				document.getElementById("mpos").addEventListener('tap', function() {
+					mui.alert('MPOS正在联调中，敬请期待...', 'MPOS');
+				});
+				//建议反馈
+				document.getElementById("suggestionfeedback").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/setting/suggestion_feedback.html',
+						id: 'me-setting-suggestion_feedback',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//消息事件
+				document.getElementById("home-btn-msg").addEventListener('tap', function() {
+					//console.log("事件执行了");
+					//弹出消息窗口
+					mui.openWindow({
+						url: 'home/msg.html',
+						id: 'home-msg',
+						waiting: {
+							autoShow: false,
+						}
+					})
+
+				})
+				//扫一扫
+				document.getElementById("icon_qrcode").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "./home/barcode_scan.html",
+						id: "barcode_scan"
+					})
+				})
+
+				// 				document.getElementById("home-saoma").addEventListener("tap", function() {
+				// 					if (!barcode) {
+				// 						barcode = plus.barcode.create('barcode', [plus.barcode.QR], {
+				// 							top: '100px',
+				// 							left: '0px',
+				// 							width: '100%',
+				// 							height: '200px',
+				// 							position: 'static'
+				// 						});
+				// 						barcode.onmarked = onmarked;
+				// 						plus.webview.currentWebview().append(barcode);
+				// 					}
+				// 					barcode.start();
+				// 
+				// 				})
+
+
+				/**  升级功能相关 start  **/
+				var ver;
+				//休眠方法 
+				function sleep(numberMillis) {
+					var now = new Date();
+					var exitTime = now.getTime() + numberMillis;
+					while (true) {
+						now = new Date();
+						if (now.getTime() > exitTime)
+							return;
+					}
+				}
+				var jq = $.noConflict();
+				//检查升级
+
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					ver = inf.version;
+					//console.log("当前应用版本：" + ver);
+					var url = address_pay('/index.php/index/index/version');
+					console.log(url);
+					var client;
+					if (mui.os.ios) {
+						client = 'ios';
+					} else {
+						client = 'android';
+					}
+					mui.ajax(url, {
+						data: {
+							version: ver,
+							client: client
+						},
+						dataType: 'json',
+						type: 'POST',
+						timeout: 10000,
+						success: function(data) {
+							if (data.status == 1) {
+								var btnArray = ['是', '否'];
+								mui.confirm('最新version是：' + data.version + ',是否更新', '发现最新版本', btnArray, function(z) {
+									if (z.index == 0) {
+										console.log('确定');
+										jq('#down_progress').show();
+
+										var dtask = plus.downloader.createDownload(data.url, {}, function(d, status) {
+											if (status == 200) {
+												clearInterval(i);
+												jq('#down_progress').hide();
+												jq('.persent').html("100%");
+												plus.nativeUI.toast("正在准备环境，请稍后！");
+												sleep(1000);
+												var path = d.filename; //_downloads yijietong.apk 
+												console.log(d.filename);
+
+												jq('#down_progress').hide();
+												plus.runtime.install(path); // 安装下载的apk文件 
+											} else {
+												
+												alert('Download failed:' + status);
+											}
+										});
+										dtask.start();
+										var i = setInterval(function() {
+											var totalSize = dtask.totalSize;
+											var downloadedSize = dtask.downloadedSize;
+											jq('#proDownFile').attr('value', downloadedSize);
+											jq('#proDownFile').attr('max', totalSize);
+											//console.log(dtask.downloadedSize+',');
+											//console.log(dtask.totalSize);
+										}, 100); //1000为1秒钟 
+									} else {
+										console.log('不确定');
+										return;
+									}
+								});
+							} else {
+								//alert(data.message);
+							}
+						},
+						error: function(xhr, type, errerThrown) {
+							mui.toast('网络异常,请稍候再试');
+							console.log(type);
+						}
+					});
+
+				});
+
+
+
+				/** 更新相关 结束  **/
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,177 @@
+/*新增加的样式*/
+.mui-slider-item img{
+    width: 50px !important;
+    height: 50px !important;
+}
+.li-container{
+    width: 96%;
+    height: 92%;
+    position: absolute;
+    padding-right: 16px;
+}
+.bank-top{
+    height: 35%;
+    background-color: red;
+    border-top-left-radius:0.5rem;
+    border-top-right-radius:0.5rem;
+}
+.bank-middle{
+    height: 35%;
+    background-color: red;
+}
+.bank-bottom{
+    height: 20%;
+    background-color: red;
+    border-bottom-right-radius:0.5rem;
+    border-bottom-left-radius:0.5rem;
+}
+
+.bank-top div{
+    float: left;
+    color: white;
+    position: relative;
+    top: 35%;
+    left: 5%;
+    font-size: 1rem;
+}
+.bank-unit{
+    width: 18%;
+    height: 1.8rem;
+    vertical-align: middle;
+    outline: none;
+    color: white;
+    background: none;
+    float: right;
+    border-radius: 1rem;
+    text-align: center;
+    margin: 20px 10px 20px 0;
+    font-size: 0.5rem;
+}
+
+.bank-card-num,.bank-show-date{
+    width: 80%;
+    position: relative;
+    left:5%;
+    top: -10px;
+    font-size: 1.2rem;
+    color: white;
+}
+.bank-show-date{
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: white;
+}
+.bank-show-date span{
+    padding: 0.4rem;
+    box-sizing: border-box;
+    border: 1px solid #ffffff;
+    border-radius: 0.5rem;
+    background: none;
+    color: white;
+}
+.bank-show-date span:first-child{
+    margin-right: 1.5rem;
+}
+
+.bank-bottom>div,.bank-bottom span{
+    font-size: 0.8rem;
+}
+.blank-bottom-left{
+    float: left;
+    padding: 0.4rem;
+    box-sizing: border-box;
+    background: none;
+    color: white;
+    margin-left: 10px;
+}
+.blank-bottom-right{
+    float: right;
+    padding: 0.4rem;
+    box-sizing: border-box;
+    background: none;
+    color: white;
+    margin-right: 10px;
+}
+.blank-bottom-right span:first-child{
+    margin-right: 10px;
+}
+.bank-logo,.bank-middle-blank{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin: 15px 0 0 10px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+/*之前写的样式*/
+.mui-table-view{
+    margin-top: 0px !important;
+}
+.mui-scroll-wrapper{
+
+}
+.mui-table-view-cell{
+    height: 220px;
+}
+.mui-table-view-cell2{
+    padding: 11px 15px;
+    height: 150px;
+}
+.cardholder{
+    margin-right: 10px;
+}
+.cardbot{
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+    /* margin-top: -10px; */
+}
+.limit-time-left{
+    float: left;
+    font-size: 30px;
+    color: red;
+    line-height: 42px;
+    margin-right: 5px;
+}
+.limit-time-right{
+    float: right;
+}
+.unbind{
+    float: right;
+    background-color: #1B99DC;
+    font-size: 12px;
+    height: 32px;
+    color: white;
+}
+.mui-content-2{
+    /* vertical-align: middle; */
+    position: relative;
+    height: 71px;
+    /* padding: 15px; */
+}
+.mui-card-2{
+    /* float: left; */
+    line-height: 40px;
+}
+.unbind2{
+    background-color: #1B99DC;
+    font-size: 12px;
+    height: 32px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    right: 15px;
+    float: right;
+
+
+}
+.mui-control-content {
+    background-color: white;
+    min-height: 760px;
+}
+.mui-control-content .mui-loading {
+    margin-top: 50px;
+}

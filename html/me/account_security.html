@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/iconfont.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">账户安全</h1>
+		</header>
+		
+		<div class="mui-content">
+			<ul class="mui-table-view mepage-list" style="margin-top: 5px;">
+				<li class="mui-table-view-cell" id="login_password">
+					<a class="mui-navigate-right touch-action" id="btn_add_creditcard">
+						<span class="mui-icon iconfont icon-denglumima"></span> <span> 重置登录密码</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="transaction_password">
+					<a class="mui-navigate-right touch-action" id="btn_add_bankcard">
+						<span class="mui-icon iconfont icon-zhifumima"></span> <span> 重置交易密码</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="locker">
+					<a class="mui-navigate-right " id="setting-setlocked">
+						<span class="mui-icon iconfont icon-shoushimima"></span> <span> 设置锁屏图案</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="update_phonenum">
+					<a class="mui-navigate-right touch-action" id="btn_add_bankcard">
+						<span class="mui-icon iconfont icon-shoujihao"></span> <span> 更换手机号</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="iv">
+						<span class="mui-icon iconfont icon-shimingrenzheng2"></span> <span> 实名认证</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function() {
+				//实名认证
+				//根据本地信息判断是否进入实名认证页面
+
+				document.getElementById("iv").addEventListener("tap",function(){
+					// console.log(localStorage.userinfo);
+					let get_real_name_status = JSON.parse(localStorage.userinfo);
+					get_real_name_status = get_real_name_status.real_name_status;
+					
+					console.log("实名认证状态："+get_real_name_status);
+					if(get_real_name_status == 2){
+						mui.openWindow({
+							url:'account_security/real_name_wait.html',
+							id: 'real_name_wait',
+							waiting:{
+								autoShow:false,
+							}
+						});
+					}else{
+						mui.openWindow({
+							url:'account_security/real_name_authentication.html' ,
+							id: 'real-name-authentication',
+							waiting:{
+								autoShow:false,
+							}
+						});
+					}
+				});
+				//设置登录密码
+				document.getElementById("login_password").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'account_security/login_password.html' ,
+							id: 'account_security-login_password',
+							waiting:{
+								autoShow:false,
+							}
+						})
+				});
+				//设置交易密码
+				document.getElementById("transaction_password").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'account_security/transaction_password.html' ,
+							id: 'account_security-transaction_password',
+							waiting:{
+								autoShow:false,
+							}
+						})
+				})
+				//设置手势密码
+				document.getElementById("update_phonenum").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'account_security/update_phonenum.html' ,
+							id: 'account_security-update_phonenum',
+							waiting:{
+								autoShow:false,
+							}
+						})
+				})
+				//更换手机号
+				document.getElementById("locker").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'account_security/locker.html' ,
+							id: 'account_security-locker',
+							waiting:{
+								autoShow:false,
+							}
+						})
+				})
+			});
+		</script>
+	</body>
+
+</html>

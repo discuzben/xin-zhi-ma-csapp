@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+		}
+		.mui-input-row
+		{
+			height: 50px;
+			line-height: 50px;
+			background: #FFFFFF;
+			margin-bottom: 1px;
+		}
+		.mui-input-row label{
+			text-align: right;
+			padding: 0;
+			line-height: 50px;
+		}
+			
+		.mui-input-row input{
+			padding: 0;
+			height: 50px;
+			line-height: 50px;
+		}
+			
+		.btn_bankcard_submit{
+			width: 90%;
+			margin: 50px 0 15px 5%;
+		}
+		.add-select{
+			font-size: 12px;
+		}
+		.add-tips{
+			padding: 0;
+			height: 50px;
+			line-height: 50px;
+			margin-left: 15px;
+			color: red;
+		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">添加储蓄卡</h1>
+		</header>
+
+		<div class="mui-content" id="mui-content">
+			<div class="mui-input-row">
+				<label>持卡人：</label>
+				<input class="inp" type="text" placeholder="请输入姓名" id="txt_username" v-model="username">
+			</div>
+			<div class="mui-input-row">
+				<label>银行卡号：</label>
+				<input class="inp" type="number" placeholder="请输入您的信用卡卡号" id="txt_card_number" v-model="card_no">
+			</div>
+			<div class="mui-input-row">
+				<label>预留手机：</label>
+				<input class="inp" type="number" placeholder="请输入您的预留手机号" id="txt_phone" v-model="phone">
+			</div>
+			<ul class="mui-table-view mui-table-view-radio">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right add-select">到账卡：用于刷卡到账、余额提现（必须绑定一张）</a>
+				</li>
+				<li class="mui-table-view-cell mui-selected">
+					<a class="mui-navigate-right add-select">充值卡：仅限于购买产品使用</a>
+				</li>
+			</ul>
+			<label class="add-tips add-select">温馨提示：同一张卡每天只能绑定两次，如失败请第二天再试</label>
+			<button type="button" id="btn_bankcard_submit" class="mui-btn mui-btn-blue btn_bankcard_submit">绑定</button>
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+
+			mui.plusReady(function() {
+				document.getElementById("btn_bankcard_submit").addEventListener("tap", function() {
+
+					var token = localStorage.logintoken;
+					//vue.js的数据
+					var data = JSON.parse(JSON.stringify(vm.$data)); //复制数据; 因为默认传的是引用;
+					data["token"] = token;
+
+					// 					//验证数据
+					if (!data.card_no || data.card_no == "") {
+						mui.toast("请填写银行卡号！");
+						return false;
+					}
+					if (!data.phone || data.phone == "") {
+						mui.toast("请填写银行预留手机号！");
+						return false;
+					}
+					var signkey = localStorage.signkey;
+					var signcode = sign(data, signkey);
+
+					data['sign'] = signcode;
+
+					var url = address("/api/BankCard/addDebitCard");
+					mui.post(url,
+						data,
+						function(data) {
+							console.log(JSON.stringify(data));
+							if (data.code == 1 && (typeof(token) != undefined)) {
+								plus.nativeUI.toast(data.msg);
+								mui.toast('绑定成功');
+								mui.openWindow({
+									url:'../me.html' ,
+									id: 'me',
+									waiting:{
+										autoShow:false,
+									}
+								})
+								
+							} else {
+								plus.nativeUI.toast(data.msg);
+							}
+							//清空用户输入的内容
+							let clearinp = document.getElementsByClassName('inp');
+							for (let key in clearinp) {
+								clearinp[key].value = '';
+							}
+						}, 'json')
+				})
+			});
+
+
+			var userinfo = JSON.parse(localStorage.userinfo);
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					username: userinfo.real_name,
+					card_no: null,
+					phone: null
+				},
+				methods: {
+					checkData: function(e) {}
+				}
+			});
+		</script>
+	</body>
+
+</html>

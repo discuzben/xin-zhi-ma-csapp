@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <link href="../../../css/mui.css" rel="stylesheet"/>
+    <link href="../../../css/common.css" rel="stylesheet"/>
+    <link href="../../../css/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/repayment_plan_list.css">
+
+    <style>
+        .mui-card .mui-control-content {
+            padding: 10px;
+        }
+        .mui-control-content {
+            height: 150px;
+        }
+				.mui-pull-bottom-tips {
+					text-align: center;
+					background-color: #efeff4;
+					font-size: 15px;
+					line-height: 40px;
+					color: #777;
+				}
+    </style>
+</head>
+<body>
+   <header class="mui-bar mui-bar-nav">
+   	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+   	<h1 class="mui-title">计划列表</h1>
+   </header>
+
+    <div class="mui-content">
+        <div class="list-top" id="list-top">
+            <div class="all-repayment">
+							<span class="inp">{{repayment_amount==null?'0.00':repayment_amount}}</span>
+                <div class="show">总还款金(元)</div>
+            </div>
+            <div class="all-consumption">
+						<span class="inp">{{consumption_amount==null?'0.00':consumption_amount}}</span>
+                <div class="show">总消费金额(元)</div>
+            </div>
+        </div>
+        <!--标题选择栏目-->
+        <div>
+            <div id="segmentedControl" class="mui-segmented-control">
+                <a class="mui-control-item mui-active state-all touch-action" href="#item_all">
+                    全部
+                </a>
+                <a class="mui-control-item state-success touch-action" href="#item_1">
+                    <span class="mui-icon iconfont icon-zhixingchenggong" style="color: #71E9A4"></span>
+                    执行成功
+                </a>
+                <a class="mui-control-item state-execute touch-action" href="#item_3">
+                    <span class="mui-icon iconfont icon-zhixingzhong" style="color:#FFD14B"></span>
+                    执行中
+                </a>
+                <a class="mui-control-item state-fail touch-action" href="#item_4">
+                    <span class="mui-icon iconfont icon-shibai" style="color:#F16541"></span>
+                    <span>失败</span>
+                </a>
+            </div>
+        </div>
+
+        <!--对应的ID-->
+        <div>
+            <div id="item_all" class="mui-control-content mui-active">
+                <div id="scroll_all">
+                <!-- <div class="mui-scroll-wrapper" id="scroll_all">
+                    <div class="mui-scroll"> -->
+                        <ul class="mui-table-view" id="list-main">
+                            <li class="mui-table-view-cell" v-for="item in planList" @tap="open_mainPlan(item)">
+                                <div class="repayment-li">
+                                    <div class="repaymeny-li-top">提交日期&nbsp;&nbsp;<span style="color: #fb6843">{{item.create_time_explain}}</span></div>
+                                    <div class="repaymeny-li-middle">
+                                        <div>消费总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_amount}}</span></div>
+                                        <div>还款总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_amount}}</span></div>
+                                        <div>消费手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_fee}}</span></div>
+                                        <div>还款手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_fee}}</span></div>
+                                        <div>消费总费率&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div>
+                                        <!-- <div>退还手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div> -->
+                                    </div>
+                                    <div class="repaymeny-li-bottom">
+                                        <span :class="item.icon_status" :style="item.icon_style"></span>
+                                        {{item.status_explain}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+								<!-- 	</div>
+                </div> -->
+            </div>
+            <div id="item_1" class="mui-control-content">
+						<!-- 	<div class="mui-scroll-wrapper" id="scroll_all">
+									<div class="mui-scroll"> -->
+										<ul class="mui-table-view" id="exe-success">
+												<li class="mui-table-view-cell"  v-for="item in planList" @tap="open_mainPlan(item)">
+														<div class="repayment-li">
+																<div class="repaymeny-li-top">提交日期&nbsp;&nbsp;<span style="color: #fb6843">{{item.create_time_explain}}</span></div>
+																<div class="repaymeny-li-middle">
+																		<div>消费总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_amount}}</span></div>
+																		<div>还款总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_amount}}</span></div>
+																		<div>消费手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_fee}}</span></div>
+																		<div>还款手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_fee}}</span></div>
+																		<div>消费总费率&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div>
+																		<!-- <div>退还手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div> -->
+																</div>
+																<div class="repaymeny-li-bottom">
+																		<span class="mui-icon iconfont icon-zhixingchenggong" style="color: #71E9A4;font-size: 1.4rem !important;"></span>
+																		{{item.status_explain}}
+																</div>
+														</div>
+												</li>
+										</ul>
+								<!-- 	</div>
+								</div> -->
+            </div>
+            <div id="item_3" class="mui-control-content">
+						<!-- 	<div class="mui-scroll-wrapper" id="scroll_all">
+									<div class="mui-scroll"> -->
+										<ul class="mui-table-view" id="executing">
+												<li class="mui-table-view-cell" v-for="item in planList" @tap="open_mainPlan(item)">
+														<div class="repayment-li">
+																<div class="repaymeny-li-top">提交日期&nbsp;&nbsp;<span style="color: #fb6843">{{item.create_time_explain}}</span></div>
+																<div class="repaymeny-li-middle">
+																		<div>消费总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_amount}}</span></div>
+																		<div>还款总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_amount}}</span></div>
+																		<div>消费手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_fee}}</span></div>
+																		<div>还款手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_fee}}</span></div>
+																		<div>消费总费率&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div>
+																		<!-- <div>退还手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div> -->
+																</div>
+																<div class="repaymeny-li-bottom">
+																		<span class="mui-icon iconfont icon-zhixingzhong" style="color: #FFD14B;font-size: 1.4rem !important;"></span>
+																		{{item.status_explain}}
+																</div>
+														</div>
+												</li>
+										</ul>
+							<!-- 		</div>
+								</div> -->
+            </div>
+            <div id="item_4" class="mui-control-content">
+							<!-- <div class="mui-scroll-wrapper" id="scroll_all">
+									<div class="mui-scroll"> -->
+										<ul class="mui-table-view" id="fail">
+												<li class="mui-table-view-cell" v-for="item in planList" @tap="open_mainPlan(item)">
+														<div class="repayment-li">
+																<div class="repaymeny-li-top">提交日期&nbsp;&nbsp;<span style="color: #fb6843">{{item.create_time_explain}}</span></div>
+																<div class="repaymeny-li-middle">
+																		<div>消费总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_amount}}</span></div>
+																		<div>还款总金额&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_amount}}</span></div>
+																		<div>消费手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.consumption_fee}}</span></div>
+																		<div>还款手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.repayment_fee}}</span></div>
+																		<div>消费总费率&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div>
+																		<!-- <div>退还手续费&nbsp;&nbsp;<span style="color: #fb6843">{{item.channel_rate}}</span></div> -->
+																</div>
+																<div class="repaymeny-li-bottom">
+																		<span class="mui-icon iconfont icon-shibai" style="color: #F16541;font-size: 1.4rem !important;"></span>
+																		{{item.status_explain}}
+																</div>
+														</div>
+												</li>
+										</ul>
+									<!-- </div>
+								</div> -->
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../../../js/mui.js"></script>
+    <script src="../../../js/md5.min.js"></script>
+    <script src="../../../js/common.js"></script>
+		<script src="../../../js/vue.min.js"></script>
+		<script src="../../../js/mui.pullToRefresh.js"></script>
+		<script src="../../../js/mui.pullToRefresh.material.js"></script>
+    <script src="../../../js/me/intelli_payment/repayment_plan_list.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+				margin-top: 0px !important;
+			}
+			.mui-bar-nav{
+				line-height: 44px;
+			}
+			#btn-my-earning{
+				color: white;
+				font-size: 12px;
+				float: right;
+				/* margin-right: 10px; */
+			}
+			.mui-table-view-cell{
+				height: 45px;
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 700px;
+			}
+			#mybalance-num{
+				background-color: #1B99DC;
+				margin-top: 1px;
+			}
+			.mybalance-num-title{
+				background-color: #1B99DC;
+				padding-top:35px;
+				display: block;
+				margin: 0px 15px;
+				color: gold;
+				text-align: center;
+			}
+			.mybalance-num{
+				background-color: #1B99DC;
+				color: white;
+				display: block;
+				padding-bottom: 20px;
+				margin: 0px 15px;
+				font-size: 32px;
+				text-align: center;
+			}
+			#btn-income{
+				position: relative;
+				display: block;
+				height: 50px;
+			}
+			#income-btn{
+				position: absolute;
+				left: 50%;
+				margin-left: -60px; 
+				background-color: goldenrod;
+				color: white;
+				width: 120px;
+				height: 35px;
+				border-radius: 5%;
+			}
+			#earn-type{
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-between;
+				margin-top: 10px;
+				height: 70px;
+				color: gold;
+				/* margin:0 20px; */
+			}
+			#earn-type-left,#earn-type-right{
+				text-align: center;
+				width: 50%;
+			}
+			#withdrawable-earn{
+				color: white;
+				text-align: center;
+				font-size: 17px;
+				margin-top: 10px;
+			}
+			#dayearn{
+				background-color: white;
+				padding: 15px;
+				border-top: 1px solid white; 
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+			}
+			.mui-table-view-cell span{
+				margin-top: 3px;
+				float: left;
+			}
+			.mui-table-view-cell p{
+				float: right;
+				margin-right: 20px;
+				margin-top: 3px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">我的收益</h1>
+			<span id="btn-my-earning">明细</span>
+		</header>
+
+		<div class="mui-content" id="mui-content">
+			<div id="mybalance-num">
+				<span class="mybalance-num-title">累计收益(元)</span><br>
+				<span class="mybalance-num">{{total_income}}</span>
+				<div id="btn-income">
+					<button id="income-btn" type="button">立即提现</button>
+				</div>
+				<div id="earn-type">
+					<div id="earn-type-left">
+						<span id="withdrawable-earn-title">
+							可提现收益（元）
+						</span><br>
+						<p id="withdrawable-earn">
+							{{balance}}
+						</p>
+					</div>
+					<div id="earn-type-right">
+						<span id="withdrawable-earn-title">
+							已提现收益（元）
+						</span><br>
+						<p id="withdrawable-earn">
+							{{total_withdrawal}}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="touch-action" id="dayearn">每日收益</div>
+			<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+				<div id="scroll1" class="mui-scroll-wrapper">
+					<div class="mui-scroll" id="mui-scroll">
+						<ul class="mui-table-view">
+							<todo-item v-for="item in earnList" v-bind:todo="item" v-bind:key="item.id">
+							</todo-item>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script src="../../../js/md5.min.js"></script>
+		<script src="../../../js/vue.min.js"></script>
+		<script type="text/javascript">
+		</script>
+
+		<script type="text/javascript">
+			mui.init();
+			//判断数据不能为空
+			function da() {
+				var da = {};
+				var token = localStorage.logintoken;
+				//vue.js的数据
+				da["token"] = token;
+
+				var signkey = localStorage.signkey;
+				var signcode = sign(da, signkey);
+
+				da['sign'] = signcode;
+				return da;
+			}
+			mui.plusReady(function() {
+				// 更新用户数据
+				var userUrl = address("/api/User/user");
+				mui.post(userUrl,
+					da(),
+					function(data) {
+						// console.log(JSON.stringify(data));
+
+						if (data.code == 1 && (typeof(token) != undefined)) {
+							plus.nativeUI.toast(data.msg);
+
+							vm.total_income = getEarn(data.data.total_income);
+							vm.balance = getEarn(data.data.balance);
+							vm.total_withdrawal = getEarn(data.data.total_withdrawal);
+
+							// localStorage.userinfo=JSON.stringify(data.data);
+						} else {
+							plus.nativeUI.toast(data.msg);
+						}
+					}, 'json')
+
+				// let userInfo = JSON.parse(localStorage.userinfo);
+
+
+
+				//post请求每日收益
+
+				var url = address("/api/Fund/incomeForDay");
+				mui.post(url,
+					da(),
+					function(data) {
+						// console.log(JSON.stringify(data));
+
+						if (data.code == 1 && (typeof(token) != undefined)) {
+							plus.nativeUI.toast(data.msg);
+							vm.earnList = data.data.data;
+						} else {
+							plus.nativeUI.toast(data.msg);
+						}
+					}, 'json')
+
+				document.getElementById("btn-my-earning").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'my_earnings_detail.html',
+						id: 'my_earnings_detail',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				});
+				document.getElementById("income-btn").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'return_income.html',
+						id: 'return_income',
+						waiting: {
+							autoShow: false,
+						}
+					});
+				});
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				//补齐和页面顶部的距离
+				var wrapper_height = mui('.mui-scroll-wrapper')[0].offsetHeight - 260;
+				mui('.mui-scroll-wrapper')[0].style.height = wrapper_height + 'px';
+			});
+			Vue.component('todo-item', {
+				props: ['todo'],
+				template: '<li class="mui-table-view-cell"><a class="mui-navigate-right touch-action"> <span>{{ todo.date }}</span><p>{{ todo.amount }}</p></a></li>'
+			})
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					total_income: null,
+					balance: '0.00',
+					total_withdrawal: '0.00',
+					earnList: []
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,713 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/iconfont.css">
+		<style>
+
+			.div_computer .mui-table-view-cell {
+            margin-bottom: 0px;
+            height: 2.2rem;
+
+        }
+
+        #div_create_list {
+            margin-top: 10px;
+        }
+
+        #div_create_list .mui-table-view .mui-table-view-cell:nth-child(2) {
+            margin-bottom: 0px;
+        }
+
+        #div_create_list .mui-table-view {
+            margin-bottom: 5px;
+
+        }
+
+        #div_create_list li > div {
+            display: block;
+            float: left;
+
+        }
+
+        .mui-table-view {
+            margin-top: 0px !important;
+        }
+
+
+        .mui-input-row {
+            height: 50px;
+            line-height: 50px;
+            background: #FFFFFF;
+            margin-bottom: 1px;
+        }
+
+        .set-bill {
+            width: 90%;
+            margin: 3% 0 0 5%;
+        }
+
+        .title {
+            margin: 0.4rem 0.4rem;
+            color: red;
+            text-align: center;
+            font-size: 1rem;
+
+        }
+
+        /*            .mui-table-view-cell>div>span{
+                        color: red;
+                        font-size: 1.1rem;
+                    }*/
+        .mui-table-view-cell > div:first-child {
+            float: left;
+        }
+
+        .mui-table-view-cell > div:last-child {
+            float: right;
+        }
+
+        .icon-huankuan {
+            float: right;
+            color: gray;
+            font-size: 1.6rem;
+            opacity: 0.5;
+        }
+
+        #repay_money {
+            width: 30%;
+            border: none;
+            position: absolute;
+            top: 10%;
+            left: 55%;
+            text-align: right;
+        }
+
+        .btn-interval, .btn-series {
+            /* width: 75px;
+                            height: 30px; */
+            padding: 0px 5px;
+            line-height: 30px;
+            float: right;
+            text-align: center;
+            border-radius: 0.2rem;
+            background-color: lightgrey;
+            color: white;
+        }
+
+        .btn-series {
+            margin-left: 0.2rem;
+        }
+
+        .div-btn {
+            float: right;
+        }
+
+        .div-btn-ini {
+            margin-top: 0.3rem;
+        }
+
+        .create-plan li > div > span {
+            width: 30%;
+            color: black;
+            float: left;
+        }
+
+        .create-plan li > div > input {
+            width: 30%;
+            color: black;
+            float: left;
+        }
+
+        .pay-time {
+            width: 51% !important;
+            border: none !important;
+            position: absolute;
+            top: 5%;
+            left: 30%;
+            text-align: left;
+            background: none !important;
+        }
+
+        .pay-all-money, .pay-remain, .pay-charge {
+            width: 60% !important;
+            position: absolute;
+            top: 5%;
+            left: 30%;
+            text-align: left;
+            border: none !important;
+            background: none !important;
+        }
+
+        .count-formula {
+            width: 60% !important;
+            /*border: none !important;*/
+        }
+
+        .mui-table-view-cell input {
+            font-size: 1rem;
+            color: red;
+        }
+
+        .ul-list {
+            border-radius: 0.2rem !important;
+            background-color: white;
+
+        }
+
+        .ul-list li {
+            background: none;
+            margin-bottom: 0px !important;
+            position: relative;
+            left: -1.3rem;
+        }
+
+
+        .btn_submit_plan {
+            width: 90%;
+            margin: 10px 0 10px 5%;
+        }
+
+
+        /**   begin日历   ****************************/
+        #selfmask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 998;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        #dateview {
+            position: fixed;
+            z-index: 999;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            height: 350px;
+            background-color: white;
+            display: block;
+        }
+
+        #datesel .dateitem span {
+            width: 100%;
+            color: black;
+            font-size: 12px !important;
+            display: block;
+        }
+
+        #datesel .dateitem span:last-child {
+            margin-top: -5px !important;
+        }
+
+        #datesel {
+            /* background-color: rgba(0,0,0,.3); */
+            padding-inline-start: 20px;
+        }
+
+        .dateitem {
+            margin: 1px;
+            /* background-color: whtie; */
+            /* border: 1px solid rgba(0,0,0,.3); */
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            text-align: center;
+            margin: 2px;
+            padding: 2px;
+
+            /* line-height: 30px; */
+            float: left;
+        }
+
+
+        .bluebackgroud {
+            background: #1b99dc;
+        }
+
+        .isSelect {
+            background: #1b99dc;
+
+        }
+
+        .isSelect * {
+            color: #ffffff !important;
+        }
+
+        /**   end日历      ****************************/
+
+    </style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">设置还款计划</h1>
+		</header>
+
+		<div class="mui-content" style="position: relative;">
+			<div id="div_set">
+				<div class="title">温馨提示：单笔最高消息金额不能大于1000元</div>
+				<!--ul第一项-->
+				<ul class="mui-table-view ul-1" style="margin-top: 25px;">
+					<li class="mui-table-view-cell" id="btn_pop_area">
+						<div id="">
+							城市选择
+						</div>
+						<div >
+							<span style="margin-right: 3rem;" id="txt_area">福建省-福州市</span><span class="mui-icon mui-icon-arrowdown"></span>
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div>
+							还款金额
+						</div>
+						<span class="mui-icon mui-icon-compose" style="float: right;"></span>
+						<input type="number" placeholder="￥0.00" id="repay_money" v-model="amount">
+					</li>
+					<li class="mui-table-view-cell">
+						<div>还款日期</div>
+						<div class="div-btn">
+							<a class="btn-series btn-change" id="btn_selectdate_con">连续选择</a>
+							<a class="btn-interval btn-change" id="btn_selectdate_discon">间隔选择</a>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="btn_poppicker">
+						<div>
+							每日还款笔数
+						</div>
+						<div>
+							<span style="margin-right: 3rem;" id="txt_count_per">2 笔</span><span class="mui-icon mui-icon-arrowdown"></span>
+						</div>
+					</li>
+
+				</ul>
+				<button type="button" id="btn_credit_submit" class="mui-btn mui-btn-blue set-bill">制定还款计划</button>
+				<div class="title">温馨提示：您的手续费会加在每笔消费中</div>
+				<!--ul子项-->
+				<ul class="mui-table-view div_computer">
+					<li class="mui-table-view-cell">
+						<div>
+							制定时间
+						</div>
+						<div>
+							<input type="text" class="pay-time" v-model="thistime">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div>
+							还款总金额
+						</div>
+						<div>
+							<input type="number" readonly class="pay-all-money" value="" placeholder="￥0.00" v-model="amount">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div>
+							还款总笔数
+						</div>
+						<div>
+							<input type="number" readonly class="pay-all-money" value="" placeholder="￥0.00" v-model="total_count">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div>
+							手续费合计
+						</div>
+						<input type="text" readonly v-model="fixamount" class="pay-charge" value="" placeholder="￥0.00">
+					</li>
+					<li class="mui-table-view-cell">
+						<div>
+							需预留额度
+						</div>
+						<div>
+							<input type="text" readonly class="pay-remain" value="" placeholder="￥0.00" v-model="require_amount">
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div id="div_create_list">
+
+				<ul class="mui-table-view" v-for="(order,oindex) in replaylist.detail.list">
+					<li class="mui-table-view-cell">
+						<span class="mui-icon iconfont icon-wodeyue"></span>
+						<span>还款金额￥{{order.amount}}</span>
+						<span>{{order.timestamp_explain}}</span>
+					</li>
+					<li class="mui-table-view-cell trade_row" v-for="(item,index) in order.detail.deduction">
+
+						<div style="width: 35%;">
+							消费(￥{{item.trade_money}})
+						</div>
+						<div class="btn_pop_mcc" onclick="pop_picker3(this)" v-bind:index1="oindex" v-bind:index2="index" style=" width:40%; border: 1px solid beige; border-radius: 1rem; padding: 0 7px;">
+
+							<input type="hidden" v-model="replaylist.detail.list[oindex].detail.deduction[index]['mcc']" class="txt_mcc_value" />
+							<span class="mui-text-justify txt_mcc_text">{{replaylist.detail.list[oindex].detail.deduction[index]['mcc_name']}}</span>
+							<span class="mui-icon mui-icon-arrowdown" style="float: right;"></span>
+						</div>
+
+						<div style="width: 20%; float: right;">
+							{{item.trade_time_explain}}
+						</div>
+
+					</li>
+
+				</ul>
+			</div>
+			<button type="button" class="mui-btn mui-btn-blue btn_submit_plan" id="btn_submit_plan">提交还款计划</button>
+
+
+		</div>
+
+		<!-- <select v-model="item.mcc">
+								<option value="10">xxx</option>
+								<option value="11">餐饮酒店</option>
+								<option value="12">百货超市</option>
+							</select> -->
+
+		<!--日历 -->
+		<div id="selfmask">
+			<div id="dateview">
+				<div style="font-size: 14px;width: 100%;height: 44px;line-height: 44px;">
+					<a id="datecancel" class="mui-pull-left touch-action" style="left: 20px;color: #000000;position:absolute; z-index: 1000;"></a>
+					<span class="mui-title" style="font-size: 15px;">请选择还款日期</span>
+					<a id="dateconfirm" class="mui-pull-right touch-action" style="right: 20px;color: #000000;position:absolute; z-index : 1000;">确认</a>
+				</div>
+				<div id="scroll1" class="mui-scroll-wrapper" style="margin-top: 30px;">
+					<div class="mui-scroll" id="mui-scroll">
+						<ul class="zh-circle" id="datesel">
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--日历 -->
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/mui.picker.min.js"></script>
+
+		<script src="../../../js/md5.min.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script src="../../../js/vue.min.js"></script>
+		<script src="../../../js/jquery-2.1.1.min.js"></script>
+		<script src="../../../js/me/intelli_payment/repayment_setPlan.js"></script>
+		<script src="../../../res/pay_enable_area.js"></script>
+		<script src="../../../res/mcc.js"></script>
+
+
+		<script type="text/javascript">
+			var ltoken = localStorage.logintoken;
+			var signkey = localStorage.signkey;
+			mui.init();
+			mui.plusReady(function() {
+				
+				var cardid = plus.webview.currentWebview().cardid;
+				
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+
+
+
+				/**********************************
+				 start 选择笔数;
+				 */
+				var picker1 = new mui.PopPicker();
+				picker1.setData([{
+					value: "1",
+					text: "1 笔"
+				}, {
+					value: '2',
+					text: "2 笔"
+				}]);
+
+				picker1.pickers[0].setSelectedIndex(2, 2000);
+				//btn_poppicker
+				document.getElementById("btn_poppicker").addEventListener("tap", function() {
+
+					picker1.show(function(selectItem) {
+
+						vm1.$data.count_per = selectItem[0].value;
+						document.getElementById('txt_count_per').innerText = selectItem[0].text;
+					});
+				})
+
+				/**********************************
+				 end 选择笔数;
+				 */
+
+				/**
+				 * 选择可消费的省、市
+				 */
+				var picker2 = new mui.PopPicker({
+					layer: 2
+				});
+				picker2.setData(enable_area);
+				picker2.pickers[0].setSelectedValue("35");
+				picker2.pickers[1].setSelectedValue("3501");
+
+				//btn_poppicker
+				document.getElementById("btn_pop_area").addEventListener("tap", function() {
+
+					picker2.show(function(selectItem) {
+
+						vm1.$data.province = selectItem[0].text;
+						vm1.$data.city = selectItem[1].text;
+						document.getElementById('txt_area').innerText = selectItem[0].text + "-" + selectItem[1].text;
+					});
+				})
+
+
+				//制定计划
+				document.getElementById("btn_credit_submit").addEventListener("tap", function() {
+
+					plus.nativeUI.showWaiting();
+			
+					var total_amount = vm1.$data.amount;
+					var sel_date = vm1.$data.select_date;
+
+					if (total_amount == null || total_amount == "" || total_amount == 0) {
+						mui.alert("请填写还款金额！");
+						plus.nativeUI.closeWaiting();
+						return false;
+					}
+
+					if (sel_date == null || sel_date == "") {
+						mui.alert("请选择还款日期！");
+
+						plus.nativeUI.closeWaiting();
+						return false;
+					}
+
+					var data = {
+						"token": ltoken,
+						"bankcard_id": cardid,
+						"total_amount": total_amount,
+						"pay_channel_id": 1,
+						"date": vm1.$data.select_date,
+						"count": vm1.$data.count_per,
+					}
+					var signcode = sign(data, signkey);
+					data['sign'] = signcode;
+
+					//console.log(JSON.stringify(data));
+					//return false;
+
+					var url = address("/api/Repayment/customize");
+					//console.log(url);
+
+					//生成还款计划；
+					mui.post(url,
+						data,
+						function(data) {
+							//console.log(JSON.stringify(data));
+							if (data.code == 1) {
+								vm2.$data.replaylist = data.data;
+							} else {
+								mui.alert(data.msg);
+							}
+
+							//vm1.$data.cards = data.data;
+							//console.log(JSON.stringify(data));
+							plus.nativeUI.closeWaiting();
+						}, 'json')
+
+
+				})
+
+				//提交计划
+				document.getElementById("btn_submit_plan").addEventListener("tap", function() {
+
+	plus.nativeUI.showWaiting();
+					//console.log(JSON.stringify(vm2.$data.replaylist));
+					//var cardid = plus.webview.currentWebview().cardid;
+
+					//console.log(vm2.$data.replaylist);
+					if (!vm2.$data.replaylist || vm2.$data.replaylist == "null") {
+						mui.alert("请先制定还款计划！");
+						plus.nativeUI.closeWaiting();
+
+						return false;
+					}
+
+					var total_amount = vm2.$data.replaylist.total;
+					if (total_amount == null || total_amount == "" || total_amount == 0) {
+						mui.alert("请填写还款金额！");
+						plus.nativeUI.closeWaiting();
+						return false;
+					}
+
+					var data2 = {
+						"token": ltoken,
+						"bankcard_id": cardid,
+						"total_amount": vm2.$data.replaylist.total,
+						"detail": JSON.stringify(vm2.$data.replaylist.detail.list),
+						"pay_channel_id": 1,
+						"province": vm1.$data.province,
+						"city": vm1.$data.city,
+						"channel_fee": vm2.$data.replaylist.detail.channel_fee,
+						"fee": vm2.$data.replaylist.detail.fee,
+						"count": vm2.$data.replaylist.detail.repay_count
+					}
+
+					var signcode = sign(data2, signkey);
+					data2['sign'] = signcode;
+
+					//console.log(JSON.stringify(data2));
+
+					//return false;
+
+					var url = address("/api/Repayment/save");
+					//console.log(url);
+					mui.post(url,
+						data2,
+						function(data3) {
+							//console.log(JSON.stringify(data3));
+							if (data3.code == 1) {
+
+								//提交计划到支付接口
+								var payurl = address_pay("/index/leshuapay/CreateRepayPlan");
+								var planid = data3.data;
+								var paydata = {
+									"token": ltoken,
+									"planid": planid,
+								}
+								mui.post(payurl,
+									paydata,
+									function(rdata) {
+
+										//	console.log("rdata:" + JSON.stringify(rdata));
+
+										if (rdata.code == 1) {
+											mui.alert("计划提交完成", "温馨提示");
+											mui.openWindow({
+												url: "repayment_plan_list.html",
+												id: "repayment_plan_list",
+												extras: {
+													cardid: cardid,
+												}
+											})
+										} else {
+											mui.alert(rdata.msg, "温馨提示")
+										}
+										
+										plus.nativeUI.closeWaiting();
+									}
+								)
+
+							} else {
+								mui.alert('计划保存失败', "温馨提示");
+								plus.nativeUI.closeWaiting();
+							}
+
+							//vm1.$data.cards = data.data;
+							//console.log(JSON.stringify(vm1.$data.cards));
+						}, 'json')
+
+				})
+
+
+			})
+
+			var picker3 = new mui.PopPicker();
+			picker3.setData(mcc);
+			picker3.pickers[0].setSelectedIndex(0);
+
+			function pop_picker3(me) {
+				var thisdiv = me;
+				var i1 = thisdiv.getAttribute("index1");
+				var i2 = thisdiv.getAttribute("index2");
+				//console.log("i1:"+i1);
+				//console.log("i2:"+i2);
+
+				//console.log(thisdiv.outerHTML);
+				picker3.show(function(selectItem) {
+					//console.log(selectItem[0].text);
+					vm2.$data.replaylist.detail.list[i1].detail.deduction[i2]['mcc'] = selectItem[0].value;
+					vm2.$data.replaylist.detail.list[i1].detail.deduction[i2]['mcc_name'] = selectItem[0].text;
+
+
+				})
+			}
+
+
+			/* start vue 程序 *********/
+			/**
+			 * 界面上计算数据
+			 */
+			var now = new Date();
+			now = formatDate(now);
+			var vm1 = new Vue({
+				el: '#div_set',
+				data: {
+					province: "福建省",
+					city: "福州市",
+					amount: null,
+					count_per: 2,
+					thistime: now,
+					feerate: 0.78,
+					fixamount: 0,
+					select_date: "",
+					total_count: 0,
+					date_count: 0,
+					require_amount: 0,
+				},
+				methods: {},
+				watch: {
+					amount: function(nval, oval) {
+
+						this.total_count = this.date_count * this.count_per;
+						this.fixamount = Math.round(this.feerate * nval) / 100 + this.date_count * this.count_per;
+						this.require_amount = this.total_count != 0 ? Math.round(nval / this.total_count + this.fixamount + 100) : 0;
+
+					},
+					date_count: function(nv, ov) {
+						this.total_count = nv * this.count_per;
+						this.require_amount = this.total_count != 0 ? Math.round(this.amount / this.total_count + this.fixamount + 100) :
+							0;
+						this.fixamount = Math.round(this.feerate * this.amount) / 100 + nv * this.count_per;
+					},
+					count_per: function(nv, ov) {
+						this.total_count = nv * this.date_count;
+						this.require_amount = this.total_count != 0 ? Math.round(this.amount / this.total_count + this.fixamount + 100) :
+							0;
+						this.fixamount = Math.round(this.feerate * this.amount) / 100 + nv * this.date_count;
+					}
+				}
+			});
+
+			/**
+			 * 生成计划后绑定到页面上的数据
+			 */
+			var vm2 = new Vue({
+				el: '#div_create_list',
+				data: {
+					replaylist: null,
+				},
+				methods: {},
+				watch: {
+					replaylist: function(nv, ov) {
+						//	console.log(JSON.stringify(nv));
+
+					}
+				}
+			})
+
+
+			/* end vue 程序 *********/
+		</script>
+	</body>
+
+</html>

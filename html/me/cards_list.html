@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<style>
+			.mui-active {
+				/* color: #1b99dc; */
+			}
+			.mui-card
+			{
+				border-radius: 5px;
+			}
+			
+			.mui-card  .bank_logo
+			{
+				width: 40px !important;
+				height: 40px;
+			}
+			
+			.mui-slider-item
+			{
+				border-bottom: 0px !important;
+			}
+			.mui-card-header:after,.mui-card-footer:before{
+				height: 0px;
+			}
+			.mui-card-content .mui-table-view{
+				margin-left: 1rem;
+				padding-bottom: 10px;
+			}
+			.btn-updateinfo{
+				float: right;
+				margin-top: -45px;
+				margin-right: 15px;
+			}
+			button{
+				background-color: #1b99dc;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">信用卡管理</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-slider">
+				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item touch-action" href="#item1" id="btn_load_credit_card">信用卡</a>
+					<a class="mui-control-item touch-action" href="#item2" id="btn_load_bank_card">储蓄卡</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
+				<div class="mui-slider-group">
+					<div id="item1" class="mui-slider-item mui-control-content mui-active">
+						<ul class="mui-table-view">
+							<div class="mui-card" v-for="card in cards ">
+								<!--页眉，放置标题-->
+								<div class="mui-card-header">
+									<img class="bank_logo" v-bind:src="'../../imgs/credit/'+card.bank.logo" />
+
+									<span>{{card.bank_name}}</span>
+
+								</div>
+								<!--内容区-->
+
+								<div class="mui-card-content">
+									<li class="mui-table-view">
+										{{card.user_name}}
+									</li>
+									<li class="mui-table-view">{{card.card_no}}</li>
+									<button class="btn-updateinfo" type="button" @tap="openChangeCardInfo(card)">修改信息</button>
+								</div>
+								<!--页脚，放置补充信息或支持的操作-->
+								<!-- <div class="mui-card-footer">
+										<button type="button" class="btn_unbind">解 绑</button>						
+									</div> -->
+							</div>
+						</ul>
+
+					</div>
+
+					<div id="item2" class="mui-slider-item mui-control-content">
+						<ul class="mui-table-view">
+
+
+							<div class="mui-card" v-for="card in cards ">
+								<!--页眉，放置标题-->
+								<div class="mui-card-header">
+									<img class="bank_logo" v-lazy="'../../imgs/credit/'+card.bank.logo" />
+									<span>{{card.bank_name}}</span>
+								</div>
+								<!--内容区-->
+								<div class="mui-card-content">
+									<li class="mui-table-view">{{card.user_name}}</li>
+									<li class="mui-table-view">{{card.card_no}}</li>
+								</div>
+								<button type="button" style="margin-top: -45px;margin-right: 15px; float: right;" @tap="unbindDebitCard(card)">解
+									绑</button>
+
+								<!--页脚，放置补充信息或支持的操作-->
+								<!-- <div class="mui-card-footer">
+													
+									</div> -->
+							</div>
+
+
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var ltoken = localStorage.logintoken;
+			var signkey = localStorage.signkey;
+
+			function openChangeCardInfo(item) {
+				mui.fire(change_card_info, 'get_change_card_info', {
+					cardId: item.id
+				});
+				setTimeout(function() {
+					change_card_info.show("slide-in-right", 300);
+				}, 150);
+			}
+
+			function unbindDebitCard(item) {
+				plus.nativeUI.showWaiting();
+				mui.confirm('确认要解除绑定吗？', "温馨提示", null, function(e) {
+					if (e.index == 1) {
+						var data = {
+							token: ltoken,
+							id: item.id
+						}
+						//解绑卡业务
+						var signcode = sign(data, signkey);
+						//console.log(signcode)
+						data['sign'] = signcode;
+						let url = address("/api/BankCard/unbindDebitCard");
+						mui.post(url,
+							data,
+							function(data) {
+								plus.nativeUI.closeWaiting();
+								console.log(JSON.stringify(data));
+								if (data.code == 1) {
+									//如查解绑成功,刷新当前页面;
+									load_bank_card();
+								}
+							}, 'json')
+
+					} else {
+						plus.nativeUI.closeWaiting();
+					}
+
+				})
+
+			}
+
+			function load_credit_card() {
+				var data = {
+					token: ltoken
+				}
+
+				var signcode = sign(data, signkey);
+				//console.log(signcode)
+				data['sign'] = signcode;
+
+				//console.log(JSON.stringify(data));
+				var url = address("/api/BankCard/creditCards");
+				console.log(url);
+				mui.post(url,
+					data,
+					function(data) {
+						// console.log(JSON.stringify(data));
+						let curdata = data.data;
+						mui.each(curdata,function(index,item){
+							if(item.bank == null){
+								item.bank = {};
+							}
+						});
+						vm1.$data.cards = curdata;
+
+						//console.log(JSON.stringify(vm1.$data.cards));
+					}, 'json')
+			}
+
+			function load_bank_card() {
+				var data = {
+					token: ltoken
+				}
+
+				var signcode = sign(data, signkey);
+				//console.log(signcode)
+				data['sign'] = signcode;
+
+				// console.log(JSON.stringify(data));
+				var url = address("/api/BankCard/debitCard");
+				console.log(url);
+				mui.post(url,
+					data,
+					function(data) {
+						let curdata = data.data;
+						mui.each(curdata,function(index,item){
+							if(item.bank == null){
+								item.bank = {};
+							}
+						});
+						console.log(JSON.stringify(data));
+						vm2.$data.cards = curdata;
+
+						//console.log(JSON.stringify(vm1.$data.cards));
+					}, 'json')
+			}
+
+			mui.plusReady(function() {
+
+				//打开页面时载入所有的信用卡信息
+				load_credit_card();
+
+				load_bank_card();
+
+				// 预加载修改卡信息页
+				change_card_info = mui.preload({
+					url: 'change_card_info.html',
+					id: 'change-card-info',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4"
+					}
+				});
+
+			})
+
+
+
+
+			//	var userinfo=JSON.parse(localStorage.userinfo);
+
+			//console.log(localStorage.userinfo);
+
+			var vm1 = new Vue({
+				el: '#item1',
+				data: {
+					cards: []
+				},
+				methods: {
+
+				}
+
+			})
+
+			var vm2 = new Vue({
+				el: '#item2',
+				data: {
+					cards: []
+				},
+				methods: {
+
+				}
+
+			})
+		</script>
+	</body>
+
+</html>

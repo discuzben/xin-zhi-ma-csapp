@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<style>
+			body,div,.mui-content{
+				background: #FFFFFF;
+			}
+			.div_logininfo{
+				width: 90%;
+				margin-left: 5%;
+			}
+			.div_logo img{
+				width: 30%;
+				margin: 10px 0 10px 35%;
+			}
+			.mui-input-row{
+				border-bottom: 1px solid gainsboro;
+				width: 86%;
+				margin-left: 7%;
+			}
+			.mui-input-row label
+			{
+				width: 25%;
+				padding: 11px 0;
+			}
+			.mui-input-row input{
+				float: left !important;
+			}
+			.btn_login{
+				float: left;
+				width: 85%;
+				margin-left: 7%;
+				margin-top: 50px;
+				background: #1b99dc;
+				
+			}
+			.btn_getvalidcode{
+				width: 30%;
+				float: right;
+				padding: 2px 3px;
+				margin-top: 9px;
+				background: #1B99DC;
+				color: #FFFFFF;
+				border-radius: 5px;
+				text-align: center;
+			}
+			.title-right{
+        color: #fff;
+        font-size: 15px;
+				font-weight: 500;
+        font-family: "微软雅黑";
+        float: right !important;
+        position: relative;
+        top: 25%;
+        right:5%;
+            }
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">注册</h1>
+			<h1 class="title-right" id="go-login">登录</h1>
+		</header>
+		<div class="mui-content" id="mui-content">
+			<div id="div_logo" class="div_logo">
+				<img src="imgs/logo-2.png" />
+			</div>
+			<div id="div_logininfo">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>手机号：</label>
+							<input type="text" placeholder="请输入手机号" v-model="phone">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>验证码：</label>
+							<input type="text" placeholder="请输入码证码" style="width: 40%;" v-model="vcode">
+							<a class="btn_getvalidcode" id="btn_getvalidcode">获取验证码</a>
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>密码：</label>
+							<input type="password" class="mui-input-password" placeholder="请输入密码" v-model="password">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>确认密码：</label>
+							<input type="password" class="mui-input-password" placeholder="请输入确认密码" v-model="confirm_password">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-input-row">
+							<label>邀请人手机号码：</label>
+							<input type="text" placeholder="请输入邀请人手机号" v-model="invite_user_phone">
+						</div>
+					</li>
+					<button type="button" class="mui-btn mui-btn-blue btn_login" id="btn_register">注册</button>
+
+				</ul>
+			</div>
+			<input type="hidden" id="test_vcode" />
+			<div id="" style="margin: 100px 0 0 0;">
+				<div class="mui-input-row mui-checkbox  mui-left" style="text-align: center;border: none;width: 300px;margin-left: 65px;">
+					<p style="height: 32px;line-height: 32px; width: 200px;margin-left: 40px;margin-top: 3px;">您是否支持<a>《用户使用协议》</a>
+					<input name="radio" type="checkbox" checked>
+				</div>
+				</p>
+			</div>
+		</div>
+
+		<script src="js/mui.js"></script>
+		<script src="js/common.js"></script>
+		<script src="js/immersed.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script src="js/vue.min.js"></script>
+		<script src="js/geolocation.js"></script>
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			let validateCode;
+			let geocode = {};
+			// 通过定位模块获取位置信息
+			function getGeocode() {
+				console.log("获取定位位置信息:");
+				plus.geolocation.getCurrentPosition(geoInf, function(e) {
+					console.log("获取定位位置信息失败：" + e.message);
+				}, {
+					geocode: true
+				});
+			}
+
+			function geoInf(position) {
+				var geocode = {};
+				//获取地址信息
+				var address = position.address;
+				vm.province = address.province;
+				vm.city = address.city;
+				vm.area = address.district;
+
+
+
+				console.log(address);
+
+				var codns = position.coords; //获取地理坐标信息；
+				var lat = codns.latitude; //获取到当前位置的纬度；
+				geocode.latitude = lat;
+				vm.latitude = geocode.latitude;
+				var longt = codns.longitude; //获取到当前位置的经度
+				geocode.longitude = longt;
+				vm.longitude = geocode.longitude;
+				console.log(JSON.stringify(position));
+			}
+			mui.plusReady(function() {
+
+				// 跳转注册页面
+				document.getElementById("go-login").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'login.html',
+						id: 'loginpage',
+						createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							aniShow: 'slide-in-left', //页面显示动画，默认为”slide-in-right“；
+							//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+
+						}
+					})
+				});
+				//提交注册
+				document.getElementById("btn_register").addEventListener("tap", function() {
+
+					getGeocode();
+					if (vm.area == null) {
+						plus.nativeUI.toast("定位失败,请开启手机定位");
+						return false;
+					}
+
+
+					let regdata = JSON.parse(JSON.stringify(vm.$data));
+					console.log(JSON.stringify(regdata));
+					delete regdata.tips;
+					//验证数据
+					if (!regdata.phone || regdata.phone == "") {
+						mui.toast("请填写手机号！");
+						return false;
+					}
+					if (!regdata.vcode || regdata.vcode == "") {
+						mui.toast("请填写验证码！");
+						return false;
+					}
+					if (!regdata.password || regdata.password == "") {
+						mui.toast("请填写密码！");
+						return false;
+					}
+					if (!regdata.confirm_password || regdata.confirm_password == "") {
+						mui.toast("请填写确认新密码！");
+						return false;
+					}
+					if (!regdata.invite_user_phone || regdata.invite_user_phone == "") {
+						mui.toast("请填写邀请人手机号码！");
+						return false;
+					}
+					if (regdata.password != regdata.confirm_password) {
+						mui.toast("两次输入密码不相同，请重新输入！");
+						return false;
+					}
+
+
+
+					let url = address("/api/Login/register");
+					mui.post(url,
+						regdata,
+						function(data) {
+							console.log(JSON.stringify(data));
+							if (data.code == 1 && (typeof(token) != undefined)) {
+								//注册后根据数据保存到localStorage,不用再登录一次,待完成
+								//保存token本地
+								// 			                    localStorage.logintoken = token;
+								// 			                    localStorage.signkey=data.data.userinfo.sign;
+								// 			
+								// 			                    console.log(localStorage.signkey);
+								plus.nativeUI.toast("注册成功，跳转登录页");
+								//plus.webview.open("index.html",);
+								mui.openWindow({
+									url: 'login.html',
+									id: 'loginpage',
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: true, //页面loaded事件发生后自动显示，默认为true
+										aniShow: 'slide-in-right', //页面显示动画，默认为”slide-in-right“；
+										//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									waiting: {
+										autoShow: false, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							} else {
+								plus.nativeUI.toast(data.msg);
+							}
+						}, 'json')
+				});
+
+				//获取验证码
+				let btn_getvalidcode = document.getElementById("btn_getvalidcode");
+				btn_getvalidcode.addEventListener("tap", function() {
+					plus.nativeUI.showWaiting();
+					let regdata = JSON.parse(JSON.stringify(vm.$data));
+					// console.log(regdata.phone)
+					if (regdata.phone == null) {
+						plus.nativeUI.closeWaiting();
+						plus.nativeUI.toast("请填写手机号码！");
+						return false;
+					}
+					let url = address("/api/Login/registerVerifyCode");
+					mui.post(url, {
+							'phone': regdata.phone
+						},
+						function(data) {
+							// validateCode = data;
+							mui.toast(data.msg);
+							countdownp(btn_getvalidcode, data.code);
+							plus.nativeUI.closeWaiting();
+							plus.nativeUI.toast("发送成功");
+							console.log(JSON.stringify(data));
+						}, 'json')
+				});
+			});
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					phone: null,
+					vcode: null,
+					password: null,
+					confirm_password: null,
+					invite_user_phone: null,
+					province: null,
+					city: null,
+					area: null,
+					longitude: null,
+					latitude: null
+				},
+				watch: {
+					// 如果 `question` 发生改变，这个函数就会运行
+					phone: function(newQuestion, oldQuestion) {
+						// 						console.log(newQuestion)
+						// 						console.log(oldQuestion)
+					}
+				},
+			});
+		</script>
+	</body>
+
+</html>

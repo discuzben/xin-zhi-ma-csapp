@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 30px !important;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 760px;
+			}
+			.cell{
+				margin:10px 20px;
+			}
+			.cell input{
+			}
+			.cell button{
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">添加邮箱</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view item1ul">
+								<li class="cell">
+									<div class="mui-input-row">
+										<input type="text" class="mui-input-clear" placeholder="请输入邮箱账户">
+									</div>
+								</li>
+								<li class="cell">
+									<div class="mui-input-row">
+										<input type="password" class="mui-input-password" placeholder="请输入账户密码">
+									</div>
+								</li>
+								<li class="cell">
+									<button type="button" class="mui-btn mui-btn-blue">添加</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/md5.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				
+			});
+		</script>
+	</body>
+
+</html>

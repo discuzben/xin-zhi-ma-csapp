@@ -1,0 +1,74 @@
+{
+	"index.html": {
+		"resources": [
+			"me.html",
+			"html/me.html",
+			"html/home.html",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"html/info.html"
+		],
+		"refer": [
+			"me.html",
+			"html/me.html",
+			"html/info.html",
+			"html/pro.html",
+			"html/home.html",
+			"login.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"index.html"
+		]
+	},
+	"html/me/account_security.html": {
+		"refer": [
+			"html/me/account_security/real_name_authentication.html"
+		]
+	},
+	"html/me/account_security/real_name_authentication.html": {
+		"refer": [
+			"html/me/account_security/real_name_authentication.html"
+		]
+	},
+	"html/me.html": {
+		"refer": [
+			"html/me/account_security.html",
+			"html/me/intelli-payment.html",
+			"html/me/cards_add_credit.html",
+			"html/me/cards_list.html",
+			"html/me/setting.html",
+			"html/me/cards_add_bankcard.html",
+			"html/me/mpos.html",
+			"html/me/upgrade.html",
+			"html/home/rapid_lending.html"
+		]
+	},
+	"html/me/intelli-payment.html": {
+		"refer": [
+			"html/me/intelli_payment/buddy_list.html",
+			"html/me/intelli_payment/my_bag_index.html",
+			"html/me/intelli_payment/my_earnings.html",
+			"html/me/intelli_payment/my_bag.html",
+			"html/me/intelli_payment/my_banlance.html"
+		]
+	},
+	"html/me/setting.html": {
+		"refer": [
+			"login.html",
+			"html/me/setting/notice.html",
+			"html/me/setting/suggestion_feedback.html"
+		]
+	},
+	"html/home.html": {
+		"refer": [
+			"html/home/credit_card_applications.html"
+		]
+	},
+	"html/me/cards_add_credit.html": {
+		"refer": [
+			"html/me/cards_add_credit.html"
+		]
+	}
+}

@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+
+		<style>
+			/* .mui-table-view{
+			margin-top: 0px !important;
+			} */
+			.mui-card-content{
+				background-color: white;
+				margin: 10px 0;
+				width: 100%;
+				height: 65px;
+				padding-top: 10px;
+				padding-left: 10px;
+			}
+			.mui-bar-nav{
+				line-height: 44px;
+			}
+			#btn-income-record{
+				color: white;
+				font-size: 12px;
+				float: right;
+				/* margin-right: 10px; */
+			}
+			.arrival-bank-card{
+				float: left;
+			}
+			.arrival-bank-card-info{
+				float: left;
+				margin-left: 10px;
+			}
+			.arrival-bank-card-info-bottom{
+				margin-top: 5px;
+			}
+			.income-limit{
+				background-color: white;
+				margin: 10px 0;
+				width: 100%;
+				height: 120px;
+				padding-top: 10px;
+				padding-left: 10px;
+			}
+			.income-limit-content{
+				border-bottom: 1px solid rgba(200,200,200,0.2);
+			}
+			#presentation{
+				padding: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">收益提现</h1>
+			<span id="btn-income-record">提现记录</span>
+		</header>
+	
+		<div class="mui-content">
+			<div class="mui-card-content">
+				<div class="arrival-bank-card">
+					<span>到账银行卡</span>
+				</div>
+				<div class="arrival-bank-card-info">
+					<span class="arrival-bank-card-info-top">中国建设银行</span><br>
+					<p class="arrival-bank-card-info-bottom">尾号9767储蓄卡</p>
+				</div>
+			</div>
+			<div class="income-limit">
+				<div class="income-limit-content">
+					<p>提现金额</p>
+					<div class="" style="font-size: 23px;width: 100%;height: 45px;line-height: 45px;">
+						<label style="font-weight: bold;float: left;">￥</label>
+						<input style="float: left; width: 250px;font-size: 23px; border: none;margin-top: 3px;" type="text" placeholder="输入金额">
+					</div>
+				</div>
+				<div class="income-limit-tips" style="width: 100%; position: relative;height: 32px;line-height: 32px;">
+					<p style="position: absolute;font-size: 13px;">可提现金额1628.64元</p>
+					<button type="button" class="mui-btn mui-btn-outlined" style="border: none;color: darkgoldenrod;position: absolute;top: 50%;margin-top: -14.5px;right: 10px; font-size: 13px;">全部提现</button>
+				</div>
+			</div>
+			<button type="button" class="mui-btn mui-btn-outlined" style=" color: white; background-color: palegoldenrod;width: 95%;height: 50px;margin: 10px;">确认提现</button>
+			<div id="presentation">
+				<p>提现说明：</p>
+				<div id="presentation-content">
+					<p>1、提现于次日18点前到账，周末照常到账，每天收益提现不能超过1笔；</p>
+					<p>2、法定节假日提现，统一在节后的第一个工作日18点前到账；</p>
+					<p>3、提现金额不小于100元；</p>
+				</div>
+				<p>手续费说明：</p>
+				<p>1、单笔收取手续费2元</p>
+			</div>
+		</div>
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/common.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				document.getElementById("btn-income-record").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'present_record.html' ,
+							id: 'present_record',
+							waiting:{
+								autoShow:false,
+							}
+						})
+				})
+			});
+		</script>
+	</body>
+
+</html>

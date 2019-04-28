@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <link href="../../../css/mui.css" rel="stylesheet"/>
+    <link href="../../../css/common.css" rel="stylesheet"/>
+    <link href="../../../css/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/repayment_planDetail.css">
+
+    <style>
+        .mui-card .mui-control-content {
+            padding: 10px;
+        }
+        .mui-control-content {
+            height: 150px;
+        }
+		.status{
+			float: right;
+			font-size: 20px;
+			margin-right: -7px;
+		}
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+    <h1 class="mui-title">账单详情</h1>
+
+</header>
+
+<div class="mui-content" id="mui-content">
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell" v-for = 'item in planDetailsList'>
+            <div style="margin-bottom: 10px">
+                <div class="done-time">日期&nbsp;&nbsp;<span class="date-show">{{item.timestamp}}</span></div>
+                <span class="money">{{item.money}}元</span>
+            </div>
+            <div>
+                <span class="bill">{{item.trans_type}}</span>
+                <span class="other">({{item.desc}})</span>
+				<p class="status mui-icon iconfont icon-zhixingzhong" style="color:#FFD14B" v-if = 'item.status == 0'>执行中</p>
+				<p class="status mui-icon iconfont icon-zhixingzhong" style="color:#FFD14B" v-else-if = 'item.status == 1'>执行中</p>
+				<p class="status mui-icon iconfont icon-zhixingchenggong" style="color: #71E9A4" v-else-if = 'item.status == 2'>执行成功</p>
+				<p class="status mui-icon iconfont icon-shibai" style="color:#F16541" v-else-if = 'item.status == 9'>执行失败</p>
+				<p class="status mui-icon iconfont icon-zhixingzhong" style="color:#FFD14B" v-else>执行中</p>
+            </div>
+        </li>
+
+    </ul>
+</div>
+
+
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/md5.min.js"></script>
+<script src="../../../js/common.js"></script>
+<script src="../../../js/vue.min.js"></script>
+<!-- <script src="../../../js/me/intelli_payment/repayment_playDetail.js"></script> -->
+<script>
+	mui.init();
+	document.addEventListener('get_planDetail', function(event) {
+		let detailid = event.detail.detailid;
+		// console.log(detailid);
+		if(detailid != ''){
+			// console.log(planid);
+			var da ={};
+			var token=localStorage.logintoken;
+			//vue.js的数据
+			da["token"]=token;
+			da['id']=detailid;
+			var signkey=localStorage.signkey;
+			var signcode=sign(da,signkey);
+			
+			da['sign']=signcode;
+			
+			//智能还款统计金额
+			var detailsUrl=address("/api/Repayment/details");
+			mui.post(detailsUrl,
+			da,
+			function(data){
+				// console.log(JSON.stringify(data));
+				if (data.code == 1 && (typeof(token) != undefined)) {
+				plus.nativeUI.toast(data.msg);
+				let curdata = data.data;
+				// console.log(curdata);
+				vm.planDetailsList = curdata;
+				}else{
+					plus.nativeUI.toast(data.msg);
+				}
+			},'json')
+		}
+	});
+	var vm = new Vue({
+		el: '#mui-content',
+		data: {
+			planDetailsList:null
+		}
+	});
+</script>
+</body>
+
+</html>

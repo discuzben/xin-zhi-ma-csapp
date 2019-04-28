@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">测试页</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-input-row">
+				<label>用户名</label>
+				<input type="text" placeholder="普通输入框" id="txt_name">
+			</div>
+			<div class="mui-input-row">
+				<label>密码</label>
+				<input type="text" placeholder="普通输入框" id="txt_password">
+			</div>
+			
+			<button type="button" class="mui-btn mui-btn-blue" id="btn_submit">提交</button>
+			
+		</div>
+		<script src="js/mui.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script type="text/javascript">
+			var server_url="http://cs.vanlee.cc/index.php"
+			mui.init()
+			mui.plusReady(function(){
+				
+				document.getElementById("btn_submit").addEventListener("tap",function(){
+					var name=document.getElementById("txt_name").value;
+					var password=document.getElementById("txt_password").value;
+					var osname=plus.os.name+'-'+plus.device.vendor+"-"+plus.device.model;
+					
+				
+				//alert(name);"
+				//alert(password);
+				//alert(md5('123456'));
+				//return;
+				
+					
+			/*
+					mui.post("http://cs.vanlee.cc/index.php/home/login/test",{"name":name,"password":password},function(data){
+						
+						console.log(JSON.stringify(data));
+						
+					},'json'),
+					
+					*/
+				   mui.post("http://api2.xinzhima.cn/index.php/api/login/test",{},function(data){
+				   	
+				   	console.log(JSON.stringify(data));
+				   	
+				   },'json');
+				   
+				 
+				
+			});
+			
+			});
+		</script>
+	</body>
+
+</html>

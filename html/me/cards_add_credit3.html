@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view {
+				margin-top: 0px !important;
+			}
+			
+			.mui-input-row {
+				height: 50px;
+				line-height: 50px;
+				background: #FFFFFF;
+				margin-bottom: 1px;
+			}
+			
+			.mui-input-row label {
+				text-align: right;
+				padding: 0;
+				line-height: 50px;
+			}
+			
+			.mui-input-row input {
+				padding: 0;
+				height: 50px;
+				line-height: 50px;
+			}
+			
+			.btn_credit_submit {
+				width: 90%;
+				margin: 50px 0 15px 5%;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加信用卡</h1>
+		</header>
+
+		<div class="mui-content" id="mui-content">
+			<form action="http://pay2.xinzhima.cn/index/Leshuapay/BindUnionCard" method="post"  target="_self">
+				<div class="mui-input-row">
+				<label>持卡人：</label>
+				<input type="text" placeholder="请输入您的姓名" id="txt_username" v-model="username" name="username">
+			</div>
+			<div class="mui-input-row">
+				<label>银行卡号：</label>
+				<input type="tel" placeholder="请输入您的信用卡卡号" id="txt_card_no" v-model="card_no" name="card_no">
+			</div>
+			<div class="mui-input-row">
+				<label>预留手机：</label>
+				<input type="number" placeholder="请输入您的预留手机号" id="txt_phone" v-model="phone" name="phone">
+			</div>
+			<div class="mui-input-row">
+				<label>安全码：</label>
+				<input type="number" placeholder="信用卡背面CVN2后三位数字" id="txt_security_code" v-model="security_code" name="security_code">
+			</div>
+			<div class="mui-input-row">
+				<label>有效期：</label>
+				<input type="number" placeholder="信用卡有效期,如:09/22" id="txt_expired_time" v-model="expired_time" name="expired_time">
+				
+				
+			</div>
+			
+			<div class="mui-input-row">
+				<label>token：</label>
+				<input type="text"  name="token" v-model="ltoken"/>
+				<input type="text"  name="cardtype" value="1"/>
+			</div>
+			
+			<div class="mui-input-row">
+				<label>cardtype：</label>
+				<input type="text"  name="cardtype" value="1"/>
+			</div>
+
+			<button type="submit" id="btn_credit_submit" class="mui-btn mui-btn-blue btn_credit_submit">提 交</button>
+				
+			</form>
+		
+
+		</div>
+		<iframe  src="http://www.baidu.com"></iframe>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+			
+			var ltoken = localStorage.logintoken;
+			
+			/*
+			mui.plusReady(function(){
+					document.getElementById("btn_credit_submit").addEventListener("tap", function() {
+				//console.log('submit...')
+				var user_name = document.getElementById('txt_username').value;
+				var card_no = document.getElementById('txt_card_no').value;
+				var phone = document.getElementById('txt_phone').value;
+				var security_code = document.getElementById('txt_security_code').value;
+				var expired_time = document.getElementById('txt_expired_time').value;
+
+				
+				//console.log("tocken:"+token);
+
+				//vue.js的数据
+				var data = JSON.parse(JSON.stringify(vm.$data)); //复制数据; 因为默认传的是引用;
+				delete data.username;
+				data["token"] = ltoken;
+
+				//console.log(JSON.stringify(data));
+
+				//验证数据
+				if(!data.card_no || data.card_no == "") {
+					mui.toast("请填写卡号！");
+					return false;
+				}
+				if(!data.phone || data.phone == "") {
+					mui.toast("请填写预留手机号！");
+					return false;
+				}
+				if(!data.security_code || data.security_code == "") {
+					mui.toast("请填写安全码！");
+					return false;
+				}
+				if(!data.expired_time || data.expired_time == "") {
+					mui.toast("请填写有效期！");
+					return false;
+				}
+
+				var signkey = localStorage.signkey;
+				var signcode = sign(data, signkey);
+
+				//console.log(signcode)
+				data['sign'] = signcode;
+
+				console.log(JSON.stringify(data));
+				var url = address_pay("/index/Leshuapay/BindUnionCard");
+				console.log(url);
+				mui.post(url,
+					data,
+					function(data) {
+						//
+						//console.log("hello post");
+						//console.log(JSON.stringify(data));
+						//mui.toast('添加信用卡完成');
+						
+						//var contents=document.getElementsByTagName('html');
+						//contents.outerHTML=data.data['returnurl'];
+						
+						document.write(data.data['returnurl']);
+						
+						
+						console.log(data.data['returnurl']);
+					}, 'json')
+			})
+			
+			
+			})
+
+		*/
+
+			//
+			var userinfo = JSON.parse(localStorage.userinfo);
+
+			//console.log(localStorage.userinfo);
+
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					username: userinfo.real_name,
+					card_no: null,
+					phone: null,
+					security_code: null,
+					expired_time: null,
+					token: ltoken,
+					cardtype: 1
+				},
+				methods: {
+					checkData: function(e) {
+
+					}
+
+				}
+
+			})
+			
+			
+		</script>
+	</body>
+
+</html>

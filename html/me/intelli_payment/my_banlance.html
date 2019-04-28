@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+		<link href="../../../css/iconfont.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			/* margin-top: 50px !important; */
+			}
+			.mui-bar-nav{
+				line-height: 44px;
+			}
+			#btn-my-balance{
+				color: white;
+				font-size: 12px;
+				float: right;
+				/* margin-right: 10px; */
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">我的余额</h1>
+			<!-- <a id="btn-my-balance">明细</a> -->
+		</header>
+
+		<div class="mui-content" id="mui-content">
+			<div id="mybalance-num" style="background-color: #1B99DC;margin-top: 1px;">
+				<span style="background-color: #1B99DC;padding-top:35px;display: block;padding-bottom: 20px;margin: 0px 15px;color: gold;">账户余额(元)</span>
+				<span style="background-color: #1B99DC;color: white; padding-top:25px;display: block;padding-bottom: 35px;margin: 0px 15px;font-size: 50px;">{{balance}}</span>
+			</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="return-banlance">
+					<a class="mui-navigate-right touch-action" id="btn_add_creditcard"><span class="mui-icon iconfont icon-yuetixian" style="color: #1B99DC;"></span> <span> 余额提现</span></a>
+				</li>
+				<li class="mui-table-view-cell" id="present-record">
+					<a class="mui-navigate-right touch-action" id="btn_add_bankcard"><span class="mui-icon iconfont icon-zhuanzhangjilu" style="color: #1B99DC;"></span> <span> 提现记录</span></a>
+				</li>
+			</ul>
+		</div>
+
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/common.js"></script>
+		<script src="../../../js/md5.min.js"></script>		
+		<script src="../../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function() {
+				let userInfo = JSON.parse(localStorage.userinfo);
+				vm.balance = getEarn(userInfo.balance);
+				document.getElementById("return-banlance").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'cash_withdrawal.html' ,
+							id: 'cash-withdrawal',
+							waiting:{
+								autoShow:false,
+							}
+						});
+				});
+				document.getElementById("present-record").addEventListener("tap",function(){
+						mui.openWindow({
+							url:'present_record.html' ,
+							id: 'present_record',
+							waiting:{
+								autoShow:false,
+							}
+						});
+				});
+				// 更新用户数据
+				var userUrl=address("/api/User/user");
+				mui.post(userUrl,
+				da(),
+				function(data){
+					// console.log(JSON.stringify(data));
+					
+					if (data.code == 1 && (typeof(token) != undefined)) {
+						plus.nativeUI.toast(data.msg);
+						
+						vm.balance = getEarn(data.data.balance);
+						
+						// localStorage.userinfo=JSON.stringify(data.data);
+					}else{
+						plus.nativeUI.toast(data.msg);
+					}
+				},'json')
+			});
+			function da(){
+				var da ={};
+				var token=localStorage.logintoken;
+				//vue.js的数据
+				da["token"]=token;
+							
+				var signkey=localStorage.signkey;
+				var signcode=sign(da,signkey);
+					
+				da['sign']=signcode;
+				return da;
+			}
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					balance:'0.00'
+				}
+			});
+		</script>
+	</body>
+
+</html>

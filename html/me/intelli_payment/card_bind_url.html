@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../../../js/jquery-2.1.1.min.js"></script>
+	</head>
+	<body>
+		<form id='form1' action="http://pay2.xinzhima.cn/index/leshuapay/bindCardUrl" method="post" target="_self">
+			<input type="hidden" value="0" name="bcuid" id="txt_bcuid"/>
+		</form>
+
+	</body>
+	<script>
+		var jq=$.noConflict();
+		jq(document).ready(function(){
+			var bcuid=localStorage.bcuid;
+			jq('#txt_bcuid').val(bcuid);
+			jq('#form1').submit();
+			})
+	</script>
+</html>

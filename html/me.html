@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/common.css" rel="stylesheet" />
+		<link href="../css/iconfont.css" rel="stylesheet" />
+
+		<link href="../css/me.css" rel="stylesheet" />
+		<style>
+			.mepage-userinfo .mui-table-view-cell{
+				background: none;
+			}
+		</style>
+	</head>
+	<body class="mepage">
+		<header class="mui-bar mui-bar-nav mepage-bar-nav">
+			<a class="mui-pull-left mepage-help touch-action f12" id="mepage-help">
+				<span class="mui-icon iconfont icon-bangzhuzhongxin" style="font-size: 12px;"> 帮助中心</span>
+			</a>
+			<h1 class="mui-title">会员中心</h1>
+			<a class="  mui-pull-right mepage-setting" id="me-btn-setting">
+				<span class="mepage-setting-text mui-icon iconfont icon-shezhi" style="font-size: 12px;"> 设置</span>
+				<span class=""></span>
+			</a>
+		</header>
+
+		<div class="mui-content" id="mui-content">
+
+			<ul class="mui-table-view mepage-userinfo">
+				<li class="mui-table-view-cell mui-media">
+					<img class="mui-media-object mui-pull-left" src="../imgs/logo.png">
+					<div class="mui-media-body">
+						XZM{{phone}}
+						<p><span class="member_level">{{role}}</span><span class="member_phone">Mob:{{phone}}</span></p>
+					</div>
+				</li>
+			</ul>
+
+			<!--
+        作者：jfeng.li@qq.com
+        时间：2018-10-16
+        描述：功能区
+    -->
+
+			<ul class="mui-table-view mui-grid-view mui-grid-4">
+				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+					<a href="#" id="me-intelligence-repayment">
+						<span class="mui-icon iconfont icon-yinxingqia  icon1 icon-zhinenghuankuanicon"></span>
+						<div class="mui-media-body">智能还款</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+					<a href="#" id="me-mpos">
+						<span class="mui-icon iconfont icon-icon_  icon2 icon-posjishenqing" style="color: white;"></span>
+						<div class="mui-media-body">MPOS</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+					<a href="#" id="me-upgrade">
+						<span class="mui-icon iconfont icon-huiyuanshengji  icon3"></span>
+						<div class="mui-media-body">会员升级</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+					<a href="#" id="me-loan">
+						<span class="mui-icon iconfont  icon-xindaiyewu icon4 icon-jisudaikuan"></span>
+						<div class="mui-media-body">极速贷款</div>
+					</a>
+				</li>
+			</ul>
+
+			<!--
+    列表
+    -->
+			<ul class="mui-table-view mepage-list" style="margin-top: 5px;">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="btn_add_creditcard">
+						<span class="mui-icon iconfont icon-tianjiaxinyongqia meicon1"></span> <span>添加信用卡</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="btn_add_bankcard">
+						<span class="mui-icon iconfont icon-tianjiachuxuqia meicon2"></span> <span>添加储蓄卡</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="btn_cardslist">
+						<span class="mui-icon iconfont icon-womenyinhangqia meicon3"></span> <span>我的银行卡</span>
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action">
+						<span class="mui-icon iconfont icon-shoukuanjilu meicon4"></span> <span>刷卡收款记录</span>
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="my-warranty">
+						<span class="mui-icon iconfont icon-wodebaodan meicon5"></span> <span>我的保单</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right touch-action" id="btn_account_security">
+						<span class="mui-icon iconfont icon-anquanshezhi meicon6"></span> <span>账户安全</span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/common.js"></script>
+		<script src="../js/md5.min.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			// var userinfo = JSON.parse(localStorage.userinfo);
+			mui.plusReady(function() {
+				//设置锁屏图案
+				document.getElementById("mepage-help").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/help_center.html',
+						id: 'home-help_center',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				document.getElementById("me-btn-setting").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/setting.html',
+						id: 'me-setting',
+						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							aniShow: 'slide-in-right', //页面显示动画，默认为”slide-in-right“；
+							//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+
+						}
+					})
+				});
+
+				//智能还款
+				document.getElementById("me-intelligence-repayment").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/intelli-payment.html',
+						id: 'me-intelli-pay',
+						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							aniShow: 'slide-in-right', //页面显示动画，默认为”slide-in-right“；
+							//duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+
+						}
+					})
+				});
+
+				//Mpos
+				document.getElementById("me-mpos").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/mpos.html',
+						id: 'me-mpos',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+
+				//会员升级
+				document.getElementById("me-upgrade").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/upgrade.html',
+						id: 'me-upgrade',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+
+				//极速贷款
+				document.getElementById("me-loan").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'home/rapid_lending.html',
+						id: 'home-rapid-lending',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+
+				//添加信用卡
+				document.getElementById("btn_add_creditcard").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/cards_add_credit.html',
+						id: 'card_add_credit',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//添加储蓄卡
+				document.getElementById("btn_add_bankcard").addEventListener("tap", function() {
+					let url = address("/api/BankCard/isBindDebitCard");
+					mui.post(url, da(),
+						function(data) {
+							console.log(JSON.stringify(data));
+							if (data.data == 'unbind') {
+								mui.openWindow({
+									url: 'me/cards_add_bankcard.html',
+									id: 'card_add_bankard',
+									waiting: {
+										autoShow: false,
+									}
+								})
+							} else {
+								mui.alert('您已绑定储蓄卡，储蓄卡只能绑定一张！');
+							}
+							plus.nativeUI.toast(data.msg);
+						}, 'json')
+				})
+				//银行卡列表
+				document.getElementById("btn_cardslist").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/cards_list.html',
+						id: 'card_list',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//我的保单
+				document.getElementById("my-warranty").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/my_warranty.html',
+						id: 'my-warranty',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				//账户安全
+				document.getElementById("btn_account_security").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'me/account_security.html',
+						id: 'me-account-security',
+						waiting: {
+							autoShow: false,
+						}
+					})
+				})
+				console.log(localStorage.userinfo);
+
+				let url = address("/api/User/user");
+				mui.post(url, da(),
+					function(data) {
+						// console.log(JSON.stringify(data));
+						plus.nativeUI.toast(data.msg);
+						let curdata = data.data;
+						vm.username = curdata.phone;
+						vm.phone = curdata.phone;
+						vm.role = curdata.role.role_name;
+					}, 'json')
+			});
+
+			function da() {
+				let apidata = {};
+				var token = localStorage.logintoken;
+				//vue.js的数据
+				apidata["token"] = token;
+
+				var signkey = localStorage.signkey;
+				var signcode = sign(apidata, signkey);
+
+				apidata['sign'] = signcode;
+				return apidata;
+			}
+			var vm = new Vue({
+				el: '#mui-content',
+				data: {
+					username: null,
+					phone: null,
+					role: null
+				},
+				methods: {}
+			})
+		</script>
+	</body>
+
+</html>

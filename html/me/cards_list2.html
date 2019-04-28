@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.mui-table-view{
+			margin-top: 0px !important;
+		}
+		.mui-scroll-wrapper{
+			
+		}
+		.mui-table-view-cell{
+			height: 220px;
+		}
+		.mui-table-view-cell2{
+			height: 150px;
+			padding: 11px 15px;
+		}
+		.cardholder{
+			margin-right: 10px;
+		}
+		.cardbot{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-between;
+			/* margin-top: -10px; */
+		}
+		.limit-time-left{
+			float: left;
+			font-size: 30px;
+			color: red;
+			line-height: 42px;
+			margin-right: 5px;
+		}
+		.limit-time-right{
+			float: right;
+		}
+		.unbind{
+			float: right;
+			background-color: #1B99DC;
+			font-size: 12px;
+			height: 32px;
+			color: white;
+		}
+		.mui-content-2{
+			/* vertical-align: middle; */
+			position: relative;
+			height: 71px;
+			/* padding: 15px; */
+		}
+		.mui-card-2{
+			/* float: left; */
+			line-height: 40px;
+		}
+		.unbind2{
+			background-color: #1B99DC;
+			font-size: 12px;
+			height: 32px;
+			color: white;
+			position: absolute;
+			top: 50%;
+			margin-top: -16px;
+			right: 15px;
+			float: right;
+			
+		
+		}
+		.mui-control-content {
+			background-color: white;
+			min-height: 760px;
+		}
+/* 		.mui-control-content .mui-loading {
+			margin-top: 50px;
+		} */
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">我的卡包</h1>
+		</header>
+
+		<div class="mui-content">
+			<div id="slider" class="mui-slider touch-action">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1mobile">
+						信用卡
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						储蓄卡
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item1ul">
+									<li class="mui-table-view-cell">
+										<div class="mui-card">
+											<div class="mui-card-header"><img class="banktype" src="../../imgs/ad1.png" style="width: 100px;"><span
+												 class="cardholder">林**</span></div>
+											<div class="mui-card-content">
+												<div class="mui-card-content-inner"><span class="cardtype">信用卡</span><span class="cardnumber">6259 ****
+														**** 8042</span></div>
+												<div class="mui-card-content-inner cardbot">
+													<div class="limit"><span>30,000</span><br><span>额度</span></div>
+													<div class="limit-time"><span class="limit-time-left">03</span>
+														<div class="limit-time-right"><span class="limit-time-right-top">天到期</span><br><span class="limit-time-right-bottom">11-05</span></div>
+													</div><button class="unbind" type="button">解除绑定</button>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view item2ul">
+
+								</ul>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function(mui) {
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				var html1 =
+					'<li class="mui-table-view-cell"><div class="mui-card"><div class="mui-card-header"><img class="banktype" src="../../imgs/ad1.png" style="width: 100px;" ><span class="cardholder">林**</span></div><div class="mui-card-content"><div class="mui-card-content-inner"><span class="cardtype">信用卡</span><span class="cardnumber">6259 **** **** 8042</span></div><div class="mui-card-content-inner cardbot"><div class="limit"><span>30,000</span><br><span>额度</span></div><div class="limit-time"><span class="limit-time-left">03</span><div class="limit-time-right"><span class="limit-time-right-top">天到期</span><br><span class="limit-time-right-bottom">11-05</span></div></div><button class="unbind" type="button">解除绑定</button></div></div></div></li>';
+				document.getElementById('item1mobile').querySelector('.item1ul').innerHTML = html1 + html1 + html1 + html1 +
+					html1;
+				for (i = 0; i < 2; i++) {
+					var wrapper_height = mui('.mui-scroll-wrapper')[i].offsetHeight - 40;
+					mui('.mui-scroll-wrapper')[i].style.height = wrapper_height + 'px';
+				}
+
+
+				var html2 =
+					'<li class="mui-table-view-cell2"><div class="mui-card"><div class="mui-card-header"><img class="banktype" src="../../imgs/ad1.png" style="width: 100px;" ><span class="cardholder">林**</span></div><div class="mui-card-content mui-content-2 cardbot"><div class="mui-card-content-inner mui-card-2"><span class="cardtype">信用卡</span><span class="cardnumber">6259 **** **** 8042</span></div><button class="unbind2" type="button">解除绑定</button></div></div></li>';
+				
+				var item2 = document.getElementById('item2mobile');
+				document.getElementById('slider').addEventListener('slide', function(e) {
+					if (e.detail.slideNumber === 1) {
+						// 					if (item2.querySelector('.mui-loading')) {
+						// 						setTimeout(function() {
+						item2.querySelector('.item2ul').innerHTML = html2 + html2 + html2 + html2 + html2;
+						// 						}, 500);
+						// 					}
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

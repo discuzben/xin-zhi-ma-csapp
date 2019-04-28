@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+
+		<style>
+			.item1ul{
+			margin-top: 30px !important;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 760px;
+			}
+			.cell{
+				margin:10px 20px;
+			}
+			.cell input{
+			}
+			.cell button{
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">添加邮箱</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-slider-group">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view itemul" id="itemul">
+								<li class="cell">
+									<div class="mui-input-row">
+										<input type="text" v-model="mail_account" class="mui-input-clear" placeholder="请输入邮箱账户">
+									</div>
+								</li>
+								<li class="cell">
+									<div class="mui-input-row">
+										<input type="password" class="mui-input-password" placeholder="请输入密码或授权码" v-model='mail_password'>
+									</div>
+								</li>
+								<li class="cell">
+									<button type="button" id="add-mail-detail" class="mui-btn mui-btn-blue">添加</button>
+								</li>
+								<li class="cell">
+									<a href="handadd_mail_detail.html" style="font-size: 15px;float: left;margin-top: 12px;">手动设置</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/md5.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				mui('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				let mailbox_id;
+				//监听上级页面传递过来的id
+				document.addEventListener('get_addmail_detail', function(event) {
+					if(event.detail.mailbox_id == ''||event.detail.mailbox_id == 'undefind'){
+						return;
+					}
+					mailbox_id = event.detail.mailbox_id;
+					// console.log(mailbox_id);
+					
+				});
+				// 请求添加电子邮箱
+				document.getElementById("add-mail-detail").addEventListener("tap", function() {
+					let Mailaddurl = address('/api/Mail/add');
+					if(mailbox_id == ''||vm.mail_account == ''||vm.mail_password == ''){
+						return;
+					}
+					mui.post(Mailaddurl,da(mailbox_id,vm.mail_account,vm.mail_password),function(data){
+						console.log("支持的电子邮箱列表："+JSON.stringify(data));
+						if (data.code == 1 && (typeof(token) != undefined)) {
+							let curdata = data.data;
+							// mui.toast('添加成功');
+							//返回展示邮箱界面
+							var targetview = plus.webview.getWebviewById('show-mail');
+						    targetview.reload();
+						    mui.back();
+							plus.nativeUI.toast(data.msg);
+						}else{
+							plus.nativeUI.toast(data.msg);
+						}
+					},'json')
+				})
+			});
+			//请求体处理
+			function da(id,username,password){
+				var da ={};
+				var token=localStorage.logintoken;
+				//保存本地的数据
+				var signkey=localStorage.signkey;
+				da['username'] = username;
+				da['password'] = password;
+				da['protocol'] = 'pop';
+				da['mailbox_id'] = id;
+				var signcode=sign(da,signkey);
+								
+				da['sign']=signcode;
+				return da;
+			}
+			// vue dom 绑定与监听
+			var vm= new Vue({
+				el:'#itemul',
+				data: {
+					mail_account:null,
+					mail_password:null,
+				},watch: {
+					mail_account: function (val) {
+						console.log(val)
+					},
+					mail_password: function (val) {
+						console.log(val)
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

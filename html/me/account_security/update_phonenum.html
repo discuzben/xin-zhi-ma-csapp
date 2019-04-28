@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link href="../../../css/common.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/update_phonenum.css">
+
+		<style>
+		.mui-table-view{
+			margin-top: 0px !important;
+		}
+		</style>
+	</head>
+
+	<body>
+		<!--标题栏-->
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">更换手机号</h1>
+		</header>
+		<!--标题栏-->
+
+		<div class="mui-content">
+			<div class="mui-slider touch-action">
+				<!-- <div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#validate-old-password">
+						验证旧号码
+					</a>
+					<a class="mui-control-item" href="#validate-new-password">
+						验证新号码
+					</a>
+				</div> -->
+
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
+
+				<div class="mui-slider-group">
+					<div id="validate-old-password" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-scroll-wrapper validate-page1">
+							<ul class="mui-table-view">
+								<li class="mui-table-view-cell">
+									<label>旧号码</label>
+									<input type="number" placeholder="请输入旧号码">
+								</li>
+								<li class="mui-table-view-cell">
+									<label>验证码</label>
+									<input style="width: 45%" type="text" placeholder="请输入验证码">
+									<button class="validate-btn">获取验证码</button>
+								</li>
+								<li class="mui-table-view-cell">
+									<label>新号码</label>
+									<input type="number" placeholder="请输入新号码">
+								</li>
+								<button type="button" class="mui-btn mui-btn-outlined btn-login-pass border-none">确认更改</button>
+							</ul>
+						</div>
+					</div>
+					<div id="validate-new-password" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper validate-page2">
+							<ul class="mui-table-view">
+								<button type="button" class="mui-btn mui-btn-outlined btn-login-pass border-none">完成</button>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script type="text/javascript">
+    mui.init()
+
+    mui.plusReady(function(){
+
+    });
+
+</script>

@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/iconfont.css" rel="stylesheet" />
+
+		<style>
+
+
+			.me-setting-exit,.me-setting-notice
+			{
+				margin-top: 8px;
+			}
+			.me-setting-exit{
+				color: red;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left touch-action"></a>
+			<h1 class="mui-title">设置</h1>
+		</header>
+
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="upgrade" style="line-height: 24px;">
+					<a class="mui-navigate-right">
+						<span class="mui-icon iconfont icon-banbengengxin"></span> 版本升级
+						<p style="float: right;margin-right: 20px;margin-top: 3px;" id="this_version">当前版本1.0.0</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell me-setting-notice" id="notice">
+					<a class="mui-navigate-right">
+						<span class="mui-icon iconfont icon-tongzhi"></span> 通知
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="clearCache">
+					<a class="mui-navigate-right">
+						<span class="mui-icon iconfont icon-qingchuhuancun"></span>
+						清除缓存
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="suggestionFeedback">
+					<a class="mui-navigate-right">
+						<span class="mui-icon iconfont icon-jianyifankui"></span>
+						建议反馈
+					</a>
+				</li>
+				<li class="mui-table-view-cell me-setting-exit">
+					<a class="mui-navigate-right" id="exit">
+						<span class="mui-icon iconfont icon-tuichu"></span>
+						退出登录
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<style>
+			.updateProDiv{
+				height: 50px;
+				width: 100%;
+				line-height: 50px;
+				position: absolute;
+				top:40%;
+				text-align: center;
+				color: #007AFF;
+			}
+			
+			#proDownFile{
+				width: 95%;
+			}
+			.mui-backdrop{
+				display: none;
+			}
+		</style>
+		<div class="mui-backdrop"  id="down_progress">
+			<div class="updateProDiv">
+					<progress value="" max="" id="proDownFile"></progress> 
+					<span class="persent"></span> 
+			</div>
+		</div>
+		
+
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/jquery-2.1.1.min.js"></script>
+
+		<script >
+			mui.init()
+			function plusReady() {
+
+				//获得当前应用版本;
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					wgtVer = inf.version;
+					document.getElementById("this_version").innerHTML = '当前应用版本：' + wgtVer;
+				});
+			}
+
+
+			if (window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener('plusready', plusReady, false);
+			}
+			
+			/**  更新相关 start  **/
+			 var ver; 
+    //休眠方法 
+    function sleep(numberMillis) { 
+        var now = new Date(); 
+        var exitTime = now.getTime() + numberMillis; 
+        while (true) { 
+            now = new Date(); 
+            if (now.getTime() > exitTime) 
+                return; 
+        } 
+    } 
+			var jq = $.noConflict();
+			//检查升级
+			document.getElementById("upgrade").addEventListener('tap', function() {
+				//mui.alert('当前是最新版本1.0.0','版本更新');
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					ver = inf.version;
+					console.log("当前应用版本：" + ver);
+					var url = address_pay('/index.php/index/index/version');
+					console.log(url);
+					var client;
+					if (mui.os.ios) {
+						client = 'ios';
+					} else {
+						client = 'android';
+					}
+					mui.ajax(url, {
+						data: {
+							version: ver,
+							client: client
+						},
+						dataType: 'json',
+						type: 'POST',
+						timeout: 10000,
+						success: function(data) {
+							if (data.status == 1) {
+								var btnArray = ['是', '否'];
+								mui.confirm('最新version是：' + data.version + ',是否更新', '发现最新版本', btnArray, function(z) {
+									if (z.index == 0) {
+										console.log('确定');
+										jq('#down_progress').show();
+									
+										var dtask = plus.downloader.createDownload(data.url, {}, function(d, status) {
+											if (status == 200) {
+												clearInterval(i);
+												jq('#down_progress').hide();
+												jq('.persent').html("100%");
+												plus.nativeUI.toast("正在准备环境，请稍后！");
+												sleep(1000);
+												var path = d.filename; //_downloads yijietong.apk 
+												console.log(d.filename);
+											
+												jq('#down_progress').hide();
+												plus.runtime.install(path); // 安装下载的apk文件 
+											} else {
+												alert('Download failed:' + status);
+											}
+										});
+										dtask.start();
+										var i = setInterval(function() {
+											var totalSize = dtask.totalSize;
+											var downloadedSize = dtask.downloadedSize;
+											jq('#proDownFile').attr('value', downloadedSize);
+											jq('#proDownFile').attr('max', totalSize);
+											//console.log(dtask.downloadedSize+',');
+											//console.log(dtask.totalSize);
+										}, 100); //1000为1秒钟 
+									} else {
+										console.log('不确定');
+										return;
+									}
+								});
+							} else {
+								alert(data.message);
+							}
+						},
+						error: function(xhr, type, errerThrown) {
+							mui.toast('网络异常,请稍候再试');
+							console.log(type);
+						}
+					});
+
+				});
+
+			});
+			
+			/** 更新相关 结束  **/
+			
+			
+			//通知设置窗口
+			document.getElementById("notice").addEventListener("tap", function() {
+				mui.openWindow({
+					url: 'setting/notice.html',
+					id: 'setting-notice',
+					waiting: {
+						autoShow: false,
+					}
+				})
+			})
+			//清除缓存操作
+			document.getElementById("clearCache").addEventListener('tap', function() {
+				mui.alert('清除缓存成功', '清除缓存');
+			});
+			//建议反馈
+			document.getElementById("suggestionFeedback").addEventListener("tap", function() {
+				mui.openWindow({
+					url: 'setting/suggestion_feedback.html',
+					id: 'setting-suggestion_feedback',
+					waiting: {
+						autoShow: false,
+					}
+				})
+			})
+
+			//退出操作******************
+			document.getElementById('exit').addEventListener('tap', function() {
+				localStorage.logintoken = null;
+				localStorage.userinfo = null;
+				//plus.webview.currentWebview().close();
+				var allwindow = plus.webview.all();
+				var cwin = plus.webview.currentWebview();
+
+				for (var i = 0; i < allwindow.length; i++) {
+					if (allwindow[i] != cwin) {
+						allwindow[i].close();
+					}
+
+				}
+
+				//console.log('logout');
+
+				var login_win=plus.webview.create("../../login.html","login");
+				login_win.show();
+				
+				
+
+				cwin.close();
+
+
+			});
+		</script>
+	</body>
+
+</html>
